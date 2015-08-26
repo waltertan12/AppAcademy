@@ -64,8 +64,10 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
-  # player1 = HumanPlayer.new("Walter")
-  player1 = ComputerPlayer.new
-  g = Game.new(player1)
-  g.play
+  100.times do |idx|
+    player1 = ComputerPlayer.new
+    g = Game.new(player1)
+    g.play
+    puts "Game #{idx+1}"
+  end
 end

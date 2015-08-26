@@ -28,12 +28,9 @@ class ComputerPlayer
 
     if !known_matches.empty?
       guess = self.known_matches.shift
-      # guesses.delete_if {|el| el == guess}
     else
-      # guess = [rand(4), rand(4)]
       guess = guesses.sample
       until intelligent_guess?(guess)
-        # guess = [rand(4), rand(4)]
         guesses.delete_if {|el| el == guess}
         guess = guesses.sample
       end
@@ -71,7 +68,7 @@ class ComputerPlayer
   def receive_match(pos1, pos2)
     if known_cards[pos1] == known_cards[pos2] && pos1 != pos2
       self.matched_cards += [pos1, pos2]
-      guesses.delete_if {|el| el == pos1 || el == pos2}
+      guesses.delete_if { |el| el == pos1 || el == pos2 }
     end
   end
 end
