@@ -1,13 +1,13 @@
 class Game
   attr_reader :current_player, :dictionary
 
-  def initialize(player1, player2)
-    @player1 = player1
-    @player2 = player2
-    @current_player = @player1
+  def initialize(players)
+    @player = players
+    @current_player = players[0]
     @fragment = ""
     @dictionary = import_dictionary('ghost-dictionary.txt')
-    @losses = {@player1 => 0, @player2 => 0}
+    @losses = {}
+    players.each {|player| losses[player] = 0}
   end
 
   def import_dictionary(filename)
@@ -35,7 +35,7 @@ class Game
     puts "Woo start!"
     until round_over?
       take_turn(@current_player)
-      puts "The current fragment is now #{@fragment}"
+      puts "The current fragment is now '#{@fragment}'"
       next_player!
     end
     @losses[previous_player] += 1
@@ -48,15 +48,16 @@ class Game
   end
 
   def previous_player
-    if @current_player == @player1
-      @player2
-    else
-      @player1
-    end
+    @players.last
+  end
+
+  def current_player
+    @players.first
   end
 
   def next_player!
-    @current_player = previous_player
+    @players.rotate!
+
   end
 
   def take_turn(player)
@@ -72,10 +73,7 @@ class Game
   def valid_play?(string)
     return false if string.match(/^[a-zA-Z]$/).nil?
     potential_fragment = @fragment + string
-    @dictionary.each_key do |key|
-      return true if key[0...potential_fragment.length] == potential_fragment
-    end
-    false
+    @dictionary.any? { |k,v| v.starts_with?(potential_fragment) }
   end
 
 end
