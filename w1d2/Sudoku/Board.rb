@@ -1,18 +1,15 @@
-require 'byebug'
-require './Tile.rb'
+require './Tile'
 
 class Board
 
   def Board.empty_grid
-    Array.new(9) do
+    Array.new(9) do 
       Array.new(9) { Tile.new(0) }
     end
   end
-
-  attr_reader :grid
-
-  def initialize(grid = nil)
-    @grid ||= Board.empty_grid
+  
+  def initialize(grid = Board.empty_grid)
+    @grid = grid
   end
 
   def Board.from_file(filename)
@@ -24,6 +21,8 @@ class Board
 
     self.new(tiles)
   end
+
+  attr_reader :grid
 
   # Use bracket methods
   def [](pos)
@@ -38,7 +37,7 @@ class Board
   end
 
   def position
-b
+
   end
 
   def render
