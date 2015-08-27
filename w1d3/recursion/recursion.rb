@@ -67,7 +67,20 @@ def bsearch(array, target)
   end
 end
 
-def mc(amount, coins = [25, 10, 5 ,1])
+# Make change using large coins first
+def make_change_basic(amount, coins = [25, 10, 5, 1])
+  return [] if amount == 0 || coins.empty?
+
+  purse = []
+  num_big = amount/coins.first
+  rem = amount % coins.first
+  num_big.times { purse << coins.first }
+  purse += mc3(rem, coins.drop(1) )
+end
+
+# Make change by using largest coins first but only add one
+# coin at a time
+def make_change_plus(amount, coins = [25, 10, 5 ,1])
   return [] if coins.empty? || amount == 0
 
   while (amount / coins.first == 0)
@@ -78,13 +91,13 @@ def mc(amount, coins = [25, 10, 5 ,1])
   purse += mc(amount - coins.first, coins)
 end
 
-def mc2(amount, coins = [25, 10, 5, 1])
+# Make change by using the smallest number of coins
+def make_change(amount, coins = [25, 10, 5, 1])
   # Base case
   return [] if amount == 0 || coins.empty?
 
   possibilities = []
   coins.each do |coin|
-    # Purse for coins
     purse = []
     new_amount = amount
     new_coins = coins.dup
@@ -95,7 +108,6 @@ def mc2(amount, coins = [25, 10, 5, 1])
     else
       new_coins = coins.drop(1)
     end
-   # Check remainder
     purse += mc( new_amount, new_coins )
 
     possibilities << purse
@@ -103,20 +115,6 @@ def mc2(amount, coins = [25, 10, 5, 1])
 
   possibilities.min_by(&:length)
 end
-
-def mc3(amount, coins = [25, 10, 5, 1])
-  if amount == 0 || coins.empty?
-    return []
-  end
-    purse = []
-    num_big = amount/coins.first
-    rem = amount % coins.first
-    num_big.times { purse << coins.first }
-    purse += mc3(rem, coins.drop(1) )
-
-
-end
-
 
 def merge_sort(arr)
   return arr if arr.length <= 1
@@ -144,15 +142,7 @@ end
 
 def subsets(array)
   return [ array ] if array.empty?
-  # answer = [[]]
   new_val = array.pop
   answer = subsets(array)
-  p "Answer: #{answer}, Array: #{array}"
-  answer += answer.deep_dup.map{|el| el << new_val}
-
-  # subsets(array)
-  # subs = subsets(array.drop(1))
-  # subs << subsets( array.take(1) )
-  # subs << a rray
-
+  answer.concat(answer.map { |el| el + [new_val] })
 end
