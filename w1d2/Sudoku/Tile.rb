@@ -1,3 +1,4 @@
+require 'colorize'
 class Tile
   attr_reader :value
 
@@ -7,7 +8,11 @@ class Tile
   end
 
   def to_s
-    value.to_s
+    if given?
+      value.to_s.colorize(:red)
+    else
+      value.to_s.colorize(:yellow)
+    end
   end
 
   def given?
