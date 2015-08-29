@@ -61,7 +61,7 @@ class Tile
   end
 
   def bombed?
-    bomb
+    revealed? && bomb
   end
 
   def flagged?

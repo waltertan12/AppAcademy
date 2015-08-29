@@ -1,8 +1,9 @@
 class Board
 
   def initialize(num_of_bombs = 5)
-    @board = Array.new(8) { Array.new(8) }
+    @board = Board.empty_grid
     @bombs = generate_bombs(num_of_bombs)
+    @flags = []
 
     populate_board
   end
@@ -26,7 +27,19 @@ class Board
     end
   end
 
-  def self.default_grid
+  def over?
+    won? || lost?
+  end
+
+  def won?
+    flags.sort == bombs.sort
+  end
+
+  def lost?
+    board.flatten.any? { |tile| tile.bombed? }
+  end
+
+  def self.empty_grid
     Array.new(8) { Array.new(8) }
   end
 
@@ -41,6 +54,6 @@ class Board
   end
 
   private
-    attr_reader   :bombs
+    attr_reader   :bombs, :flags
     attr_accessor :board
 end
