@@ -30,7 +30,7 @@ class Tile
   end
 
   def neighbors
-    if @neighbors.nil? || @neighbors.empty?
+    if @neighbors.nil?
       @neighbors = []
       neighboring_tiles = []
 

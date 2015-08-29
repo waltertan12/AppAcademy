@@ -55,7 +55,7 @@ class Board
   end
 
   def lost?
-    board.flatten.any? { |tile| tile.bombed? }
+    board.flatten.any? { |tile| tile.revealed? && tile.bombed? }
   end
 
   def self.empty_grid
@@ -70,6 +70,33 @@ class Board
   def []=(pos, val)
     row, col = pos
     self.board[row][col] = val
+  end
+
+  def reveal(pos)
+    queue = [ self[pos] ]
+
+    until queue.empty?
+      current_tile = queue.shift
+      value = current_tile.reveal
+
+      if value == 0
+        current_tile.neighbors.each do |neighbor_tile|
+          queue << neighbor_tile unless neighbor_tile.revealed?
+        end
+      end
+    end
+  end
+
+  def flag(pos)
+    self[pos].flag
+  end
+
+  def unflag(pos)
+    self[pos].unflag
+  end
+
+  def inspect
+    "<Board##{object_id}>, Bombs: #{bombs}, Flags: #{flags}"
   end
 
   private
