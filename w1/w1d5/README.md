@@ -3,7 +3,7 @@
 
 This is the classic minesweeper game built with Ruby.
 
-Type in `ruby Game.rb` in the terminal to run the game.
+Type in `ruby Minesweeper.rb` in the terminal to run the game.
 
 To play, enter the row and column number of the cell you'd like to manipulate in the format `0,1` (you can add spaces in between, it doesn't matter). Then, type in the action you'd like to take by writing `f` to flag, `u` to unflag, or `r` to reveal.
 
