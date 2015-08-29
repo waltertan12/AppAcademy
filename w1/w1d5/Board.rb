@@ -2,7 +2,7 @@ require_relative 'Tile'
 
 class Board
 
-  def initialize(num_of_bombs = 5)
+  def initialize(num_of_bombs)
     @board = Board.empty_grid
     @bombs = []
     @flags = []
@@ -89,10 +89,12 @@ class Board
 
   def flag(pos)
     self[pos].flag
+    flags << pos
   end
 
   def unflag(pos)
     self[pos].unflag
+    flags.delete(pos)
   end
 
   def inspect

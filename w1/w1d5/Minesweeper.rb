@@ -1,143 +1,156 @@
-require 'byebug'
-require 'colorize'
+require 'yaml'
+require_relative 'Board'
+
 class Minesweeper
-  attr_accessor :board
-  attr_reader   :bombs, :flagged
+  attr_accessor :moves, :flags
 
-  def initialize(board = Minesweeper.default_grid, bombs = 5)
-    @board = board
-    @bombs = generate_bombs(bombs)
-    @flagged = []
+  def initialize(num_of_bombs = 5)
+    @name  = nil
+    @moves = 0
+    @flags = 0
+    @bombs = num_of_bombs
+    @board = Board.new(num_of_bombs)
   end
 
-  def display
-    puts "  0  1  2  3  4  5  6  7  8"
-    board.each_with_index do |row, idx|
-      display_row(idx, row)
-    end
-    "u suk"
-  end
-
-  def display_row(row_num, array)
-    print "#{row_num} "
-    array.each do |elem|
-
-      if elem == "_"
-        print "#{elem}  "
-      elsif elem == "🚩"
-        print "#{elem}  "
-      elsif elem == 0
-        print "#{elem.to_s.colorize(:black)}  "
-      else
-        print "#{elem.to_s.colorize(:light_blue)}  "
-      end
-    end
-    print "\n"
-  end
-
-  def reveal(pos)
-
-    if bombs.include?(pos)
-      self[pos] = "💥"
-    else #reveal neighbors
-      queue = [pos]
-      until queue.empty?
-        current_pos = queue.shift
-        bombs_found = neighbors_bomb_count(current_pos)
-        puts "Bombs Found: #{bombs_found}"
-
-        self[current_pos] = bombs_found if self[current_pos] == "_"
-
-        if bombs_found == 0
-          neighbors(current_pos).each do |spot|
-            puts "#{spot}"
-            queue << spot if self[spot] == "_"
-          end
-        end
-      end
-    end
-  end
-
-  def neighbors(pos)
-    valid_positions = []
-    deltas = [
-      [ 0,  1],
-      [ 1,  1],
-      [ 1,  0],
-      [ 1, -1],
-      [ 0, -1],
-      [-1, -1],
-      [-1,  0],
-      [-1,  1]
-    ]
-    row, col = pos
-    deltas.each do |delta|
-      if ((row + delta.first  >= 0)  && (row + delta.first < 9)) &&
-         ((col + delta.last  >= 0)  && (col + delta.last < 9))
-
-        valid_positions << [row + delta.first, col + delta.last]
-       end
+  def play
+    if name.nil?
+      welcome
+      load
     end
 
-    valid_positions
-  end
-
-  def neighbors_bomb_count(pos)
-    check = neighbors(pos)
-    nearby_bombs = 0
-
-    check.each do |spot|
-      nearby_bombs += 1 if bombs.include?(spot)
+    until board.over?
+      play_turn
     end
-    nearby_bombs
+
+    game_over_response
   end
 
-  def [](pos)
-    row, col = pos
-    board[row][col]
+  def play_turn
+    update
+    coordinate, decision = get_response
+    case decision
+      when 'f'
+        board.flag(coordinate)
+        self.flags += 1
+      when 'u'
+        board.unflag(coordinate)
+        self.flags -= 1
+      when 'r'
+        board.reveal(coordinate)
+    end
+    self.moves += 1
   end
 
-  def []=(pos, value)
-    row, col = pos
-    board[row][col] = value
-  end
-
-  def flag_bomb(pos)
-    if self[pos] == "_"
-      self[pos] = "🚩"
-      flagged << pos
+  def game_over_response
+    system("clear")
+    board.render
+    if board.won?
+      Kernel.abort("Yey")
     else
-      puts "You can't do that"
+      Kernel.abort("Oh no...")
     end
   end
 
-  def unflag_bomb(pos)
-    self[pos] == "_" if self[pos] == "🚩"
+  def welcome
+    system("clear")
+    puts "Welcome to Minesweeper"
+    get_name
+    puts "#{name}, type 'exit' at any point in the game to save and exit."
   end
 
-  def over?
-    won? || lost?
+  def update
+    system("clear")
+    board.render
+    puts "Moves Taken: #{moves}, Mines Remaining: #{bombs - flags}"
   end
 
-  def lost?
-    board.flatten.include?("💥")
-  end
-
-  def won?
-    flagged.sort == bombs.sort
-  end
-
-  def generate_bombs(bomb_count)
-    bomb_array = []
-    until bomb_array.length == bomb_count
-      temp = [rand(8), rand(8)]
-      bomb_array << temp unless bomb_array.include?(temp)
+  def load
+    puts "Would you like to load a saved game? [Y/N]"
+    print "> "
+    response = gets.chomp.downcase
+    until (/^y$|^n$|^yes$|^no$/).match(response)
+      response = gets.chomp.downcase
+      puts "Please type 'Y' or 'N'"
+      print "> "
     end
-    bomb_array
+
+    load_file if (/y/).match(response)
+  end
+
+  def load_file
+    puts "Type the name of the file you'd like to load:"
+    print "> "
+    filename = ""
+    until valid_file?(filename)
+      filename = gets.chomp
+    end
+    YAML.load_file(filename).play
+  end
+
+  def valid_file?(filename)
+    File.file?(filename)
+  end
+
+  def get_name
+    if name.nil?
+      puts "What is your name"
+      print "> "
+      self.name = gets.chomp
+    end
+  end
+
+  def get_response
+    [get_coordinate, get_decision]
+  end
+
+  def get_coordinate
+    puts "Please select coordinates (enter row,col)"
+    print "> "
+    coordinate = nil
+    until valid_coordinate?(coordinate)
+      coordinate = gets.chomp
+      save if coordinate == "save"
+      coordinate = coordinate.gsub(" ","").split(",").map!(&:to_i)
+      puts "Please enter a valid coordinate" unless valid_coordinate?(coordinate)
+    end
+    coordinate
+  end
+
+  def get_decision
+    puts "What would you like to do (enter 'f' to flag, 'u' to unflag, 'r' to reveal"
+    print "> "
+    decision = nil
+    until valid_decision?(decision)
+      decision = gets.chomp
+      save if decision == "save"
+      puts "Please type f, r, or u to flag, reveal, or unflag" unless valid_decision?(decision)
+    end
+    decision
+  end
+
+  def valid_coordinate?(coordinate)
+    coordinate.is_a?(Array) && coordinate.length == 2 &&
+    coordinate.first < 9    && coordinate.first  >= 0 &&
+    coordinate.last  < 9    && coordinate.last   >= 0
+  end
+
+  def valid_decision?(decision)
+    !(/^f$|^u$|^r$/).match(decision).nil?
+  end
+
+  def save
+    puts "Name the file:"
+    print "> "
+    filename = gets.chomp
+    File.write(filename, self.to_yaml)
+    Kernel.abort("Goodbye")
   end
 
   private
-  def self.default_grid
-    Array.new(9) { Array.new(9, "_") }
-  end
+    attr_accessor :name
+    attr_reader   :board, :bombs
+end
+
+if __FILE__ == $PROGRAM_NAME
+  Minesweeper.new.play
 end
