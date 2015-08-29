@@ -1,3 +1,3 @@
 # w1d1
-[Enumerables](Enumerables/README.md)
-[Ghost]
+* [Enumerables](Enumerables/README.md)
+* [Ghost](Ghost/README.md)
