@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Tile
   def initialize(bomb, board, pos)
     @bomb      = bomb   # true if Tile contains a bomb, false, otherwise
@@ -74,7 +76,31 @@ class Tile
   end
 
   def to_s
-    value
+    case value
+      when 0
+        value.to_s.colorize(:black)
+      when 1
+        value.to_s.colorize(:light_green)
+      when 2
+        value.to_s.colorize(:green)
+      when 3
+        value.to_s.colorize(:light_yellow)
+      when 4
+        value.to_s.colorize(:yellow)
+      when 5
+        value.to_s.colorize(:light_red)
+      when 6
+        value.to_s.coloriaze(:light_magenta)
+      when 7
+        value.to_s.colorize(:blue)
+      when 8
+      when "🚩"
+        value.colorize(:red)
+      when "💥"
+        value.colorize(:light_blue)
+      else
+        value
+      end
   end
 
   def inspect
