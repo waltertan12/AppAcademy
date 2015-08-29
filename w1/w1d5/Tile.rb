@@ -44,10 +44,6 @@ class Tile
     end
   end
 
-  def valid?(x, y)
-    x >= 0 && x < 9 && y >= 0 && y < 9
-  end
-
   def add_neighbor(neighbor)
     neighbors << neighbor unless neighbors.include?(neighbor)
   end
@@ -58,6 +54,10 @@ class Tile
       bomb_count += 1 if neighbor.bombed?
     end
     bomb_count
+  end
+
+  def valid?(x, y)
+    x >= 0 && x < 9 && y >= 0 && y < 9
   end
 
   def bombed?
