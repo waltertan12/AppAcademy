@@ -28,10 +28,11 @@ class Tile
   end
 
   def neighbors
-    if neighbors.empty?
+    if @neighbors.nil? || @neighbors.empty?
+      @neighbors = []
       neighboring_tiles = []
 
-      x, y = pos.first, pos.last
+      x, y = position.first, position.last
 
       DELTAS.each do |delta|
         dx, dy = delta.first, delta.last
@@ -61,7 +62,7 @@ class Tile
   end
 
   def bombed?
-    revealed? && bomb
+    bomb
   end
 
   def flagged?
@@ -78,11 +79,11 @@ class Tile
 
   def inspect
     "<Tile##{self.object_id}>, Position: #{position}, Value: '#{value}'"
-    # "<Tile##{self.object_id}>, Value: '#{value}'"
   end
 
   private
-    attr_accessor :revealed, :flagged, :value, :position
+    attr_accessor :revealed, :flagged, :value, :position, :bomb
+    attr_reader   :board
 
     DELTAS = [
       [ 0, -1],

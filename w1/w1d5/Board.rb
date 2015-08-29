@@ -1,10 +1,13 @@
+require_relative 'Tile'
+
 class Board
 
   def initialize(num_of_bombs = 5)
     @board = Board.empty_grid
-    @bombs = generate_bombs(num_of_bombs)
+    @bombs = []
     @flags = []
 
+    generate_bombs(num_of_bombs)
     populate_board
   end
 
@@ -27,6 +30,22 @@ class Board
     end
   end
 
+  def render
+    puts "  0 1 2 3 4 5 6 7 8"
+    board.each_with_index do |row_arr, row_idx|
+      render_row(row_arr, row_idx)
+    end
+    nil
+  end
+
+  def render_row(array, index)
+    print "#{index} "
+    array.each do |elem|
+      print "#{elem} "
+    end
+    print "\n"
+  end
+
   def over?
     won? || lost?
   end
@@ -40,7 +59,7 @@ class Board
   end
 
   def self.empty_grid
-    Array.new(8) { Array.new(8) }
+    Array.new(9) { Array.new(9) }
   end
 
   def [](pos)
