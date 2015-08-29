@@ -1,5 +1,4 @@
 # Minesweeper
----------------
 
 This is the classic minesweeper game built with Ruby.
 
