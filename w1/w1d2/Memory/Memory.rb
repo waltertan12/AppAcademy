@@ -4,7 +4,7 @@ require './Card'
 require './HumanPlayer'
 require './ComputerPlayer'
 
-class Game
+class Memory
   SLEEP_TIME = 2
 
   def initialize(player)
@@ -80,11 +80,15 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
-  puts "What is your name?"
+  puts "What is your name? (If you type 'Computer', the Game will be run with an AI)"
   print "> "
   name = gets.chomp
-  player = HumanPlayer.new(name)
-  Game.new(player).play
+  if name == 'Computer'
+    player = ComputerPlayer.new
+  else
+    player = HumanPlayer.new(name)
+  end
+  Memory.new(player).play
 
   # Uncomment this section to test the Computer Player class
   # 10.times do |idx|
