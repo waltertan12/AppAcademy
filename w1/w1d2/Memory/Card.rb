@@ -1,19 +1,20 @@
 class Card
   attr_reader :value, :state
+
   VALUES = [
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "jack",
-    "queen",
-    "king",
-    "ace"
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Jack",
+    "Queen",
+    "King",
+    "Ace"
   ]
 
   def initialize
@@ -22,16 +23,17 @@ class Card
   end
 
   def hide
-    @state = false
+    self.state = false
   end
 
   def reveal
-    @state = true
+    self.state = true
+    value
   end
 
   def to_s
     if state
-      pad(@value.to_s)
+      pad(value.to_s)
     else
       pad('x')
     end
@@ -42,6 +44,9 @@ class Card
   end
 
   private
+    attr_writer :state
+    
+    # Make sure each string is 6 characters long by padding with spaces
     def pad(string)
       until string.length == 6
         string += " "

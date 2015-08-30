@@ -7,7 +7,7 @@ class HumanPlayer
 
   def make_guess
     puts "Choose a card"
-    guess = gets.chomp.split(",").map(&:to_i)
+    guess = gets.chomp.gsub(" ","")split(",").map(&:to_i)
   end
 
   def receive_revealed_card(_)

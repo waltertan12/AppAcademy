@@ -1,5 +1,7 @@
+require_relative 'Card'
+
 class Board
-  # attr_accessor :grid
+  attr_accessor :grid
   BOARD_SIZE = 4
 
   def initialize
@@ -17,21 +19,21 @@ class Board
       end
     end
 
-    puts "#{card_array}"
     card_array.shuffle!
 
-    @grid.length.times do |i|
-      @grid.length.times do |j|
-        @grid[i][j] = card_array.pop
+    (0...BOARD_SIZE).each do |idx1|
+      (0...BOARD_SIZE).each do |idx2|
+        self.grid[idx1][idx2] = card_array.pop
       end
     end
   end
 
   def render
-    puts "-----------------"
-    @grid.length.times do |idx1|
-      @grid.length.times do |idx2|
-        print @grid[idx1][idx2]
+    puts "  0     1     2     3     "
+    (0...BOARD_SIZE).each do |idx1|
+      print "#{idx1} "
+      (0...BOARD_SIZE).each do |idx2|
+        print "#{grid[idx1][idx2]}"
       end
         print "\n"
     end
@@ -39,20 +41,18 @@ class Board
 
   def reveal(guessed_pos)
     self[*guessed_pos].reveal
-    self[*guessed_pos].value
+    # self[*guessed_pos].value
   end
 
   def won?
-    @grid.each do |sub_arr|
+    grid.each do |sub_arr|
       return false if sub_arr.any? { |el| el.state == false }
     end
     true
   end
 
   def [](row, col)
-    @grid[row][col]
+    grid[row][col]
   end
 
-  private
-    attr_reader :grid
 end

@@ -5,52 +5,68 @@ require './HumanPlayer'
 require './ComputerPlayer'
 
 class Game
-  attr_reader :board, :player
+  SLEEP_TIME = 2
 
   def initialize(player)
     @player = player
     @board = Board.new
-    @previous_guess = nil
+    @first_guess = nil
   end
 
   def play
-    puts "Let's get it started, #{player.name}"
-    board.render
+    welcome
+
     until board.won?
-      previous_guess = get_guess
-      system("clear")
+      play_turn
+    end
 
-      player.receive_revealed_card(board.reveal(previous_guess))
+    game_over_response
+  end
 
+  private
+    attr_reader   :board, :player
+    attr_accessor :first_guess
 
+    def welcome
+      puts "Welcome to Memory!"
+      puts "Let's get it started, #{player.name}!"
       board.render
+    end
 
+    def game_over_response
+      puts "You win! You're a winner no matter what anyone else says."
+    end
+
+    def play_turn
+      # Get first guess
+      self.first_guess = get_player_response
+      second_guess = get_player_response
+      handle_guesses(first_guess, second_guess)
+      sleep(SLEEP_TIME)
+      system("clear")
+      board.render
+    end
+
+    def handle_guesses(guess_one, guess_two)
+      if board[*guess_one].value == board[*guess_two].value
+        puts "You got a match!"
+      else
+        board[*guess_one].hide
+        board[*guess_two].hide
+        self.first_guess = nil
+      end
+    end
+
+    def get_player_response
       guess = get_guess
       system("clear")
       player.receive_revealed_card(board.reveal(guess))
       board.render
-
-      if board[*guess].value != board[*previous_guess].value
-        board[*guess].hide
-        board[*previous_guess].hide
-        previous_guess = nil
-      else
-        puts "You got a match!"
-      end
-
-      # sleep(1)
-
-      system("clear")
-      board.render
+      guess
     end
-    puts "You win! You're a winner no matter what anyone else says."
-  end
-
-  private
-    attr_accessor :previous_guess
 
     def valid_guess?(guess)
-      guess != previous_guess && guess.is_a?(Array) && guess.length == 2 && !board[*guess].state
+      guess != first_guess && guess.is_a?(Array) && guess.length == 2 && !board[*guess].state
     end
 
     def get_guess
@@ -64,10 +80,16 @@ class Game
 end
 
 if __FILE__ == $PROGRAM_NAME
-  100.times do |idx|
-    player1 = ComputerPlayer.new
-    g = Game.new(player1)
-    g.play
-    puts "Game #{idx+1}"
-  end
+  puts "What is your name?"
+  print "> "
+  name = gets.chomp
+  player = HumanPlayer.new(name)
+  Game.new(player).play
+
+  # Uncomment this section to test the Computer Player class
+  # 10.times do |idx|
+  #   player = ComputerPlayer.new
+  #   Game.new(player).play
+  #   puts "Game #{idx+1}"
+  # end
 end
