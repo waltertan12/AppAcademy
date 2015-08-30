@@ -15,7 +15,7 @@ class Board
   def Board.from_file(filename)
     rows = File.readlines(filename).map(&:chomp)
     tiles = rows.map do |row|
-      nums = row.split("") { |char| Integer(char) }
+      nums = row.split(//).map { |char| Integer(char) }
       nums.map { |num| Tile.new(num) }
     end
 
@@ -83,7 +83,7 @@ class Board
     # Find the tiles in each sub-square and add to the tiles array
     (x...x + 3).each do |i|
       (y...y + 3).each do |j|
-        tiles << self[i, j]
+        tiles << self[[i,j]]
       end
     end
 

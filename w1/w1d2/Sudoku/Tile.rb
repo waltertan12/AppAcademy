@@ -9,9 +9,13 @@ class Tile
 
   def to_s
     if given?
-      value.to_s.colorize(:red)
+      value.to_s.colorize(:light_white)
     else
-      value.to_s.colorize(:yellow)
+      if value == 0
+        value.to_s.colorize(:red)
+      else
+        value.to_s.colorize(:green)
+      end
     end
   end
 
