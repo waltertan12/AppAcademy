@@ -5,4 +5,4 @@ To run the game, type `ruby Memory.rb`. The game will ask you to type in your na
 
 The terminal will prompt you to flip cards over by asking you to type in coordinates in the format `row, col`.
 
-You have an infinite number of terms to finish the game.
+You have an infinite number of turns to finish the game.
