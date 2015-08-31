@@ -3,77 +3,69 @@ require_relative 'Board'
 
 class Solver
   attr_reader :queens, :board
+  attr_accessor :solutions, :sol_count
 
   def initialize(queens = 8)
-    @board  = Board.new(queens)
-    @queens = queens
+    @solutions = 0
+    @sol_count = 0
+    @board     = Board.new(queens)
+    @queens    = queens
   end
 
-  # Breadth first search of 
-  def place_queens
-    system("clear")
-    locations = []
+  def place_queens_i
+    solutions_array      = []
+    locations            = []
 
-
-    # Start at (0,0) and place queens
-    row_start = 0
-    col_start = 0
-
-    row_start_two = 0
-    col_start_two = 0
-
-    until locations.length == queens
-
+    row_start, col_start = 0, 0
+    queens_placed        = 0
+    until (row_start >= queens && col_start >= queens - 1) || sol_count == solutions
       (row_start...queens).each do |row|
+        if row != row_start
+          col_start = 0
+        end
         (col_start...queens).each do |col|
-          # puts "#{row} #{col}"
           place_queen(row, col)
-
           if board.conflict?
             remove_queen(row, col)
           else
             locations << [row, col] unless locations.include?([row, col])
+            if locations.length == queens
+              solutions_array << locations.sort unless solutions_array.include?(locations.sort)
+              self.sol_count += 1
+              puts "ITERATIVE solution #{sol_count}: "
+              render
+              print "\n"
+            end
           end
-
-          # render
-          # sleep(0.005)
-          # system("clear")
         end
       end
 
-      # If no solution is found, change the initial starting position
-      # and existing queens
-      col_start += 1
-      if col_start == queens
-        row_start += 1
-        col_start =  0
-      end
-
-      # Remove all queens if the original starting point didn't work
-      if row_start == queens && locations.length < queens
-        col_start_two += 1
-        if col_start_two == queens
-          row_start_two += 1
-          col_start_two =  0
+      if locations.empty?
+        col_start += 1
+        if col_start >= queens
+          row_start += 1
+          col_start  = 0
         end
-        row_start = row_start_two
-        col_start = col_start_two
-        remove_queens(locations)
-        locations = []
-      # Remove all but the first queen to see 
       else
-        remove_queens(locations.drop(queens - col_start))
-        locations = locations.take(queens - col_start)
+        x, y = locations.pop
+        remove_queen(x, y)
+        if y >= queens - 1
+          x += 1
+          y  = 0
+        else
+          y += 1
+        end
+        row_start = x
+        col_start = y
       end
-    end
 
-    if locations.length == queens - 1
-    puts "Found successful solution!"
-    puts "#{locations}"
-    else
-      puts "dang..."
     end
-    render
+    solutions_array
+  end
+
+  def render_locations(array)
+    array.each {|el| p el }
+    array
   end
 
   def remove_queens(locations)
@@ -82,17 +74,20 @@ class Solver
     end
   end
 
-  # Breadth first searching of a solution
+  # Depth first searching of a solution
   # Start at [0, 0] and place a queen, then view all 
   def solve(row)
     (0...queens).each do |col|
+      # render
+      # sleep 0.5
       place_queen(row, col)
 
       unless board.conflict?
         if row == (queens - 1)
-          puts "\n\n"
-          puts "Found a solution: \n"
-          return render
+          self.solutions += 1
+          puts "RECURSIVE solution #{solutions}: \n"
+          render
+          puts "\n"
         else
           solve(row + 1)
         end
@@ -120,4 +115,5 @@ if __FILE__ == $PROGRAM_NAME
   queens = gets.chomp.to_i
   s = Solver.new(queens)
   s.solve(0)
+  s.place_queens_i
 end

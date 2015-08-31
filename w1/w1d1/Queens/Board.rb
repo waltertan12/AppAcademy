@@ -47,7 +47,7 @@ class Board
     end
 
     # Do the upper-right portion of the array
-    0.upto(size-1) do |row_idx|
+    (0...size).each do |row_idx|
       diagonal = []
 
       d_idx = 0
@@ -70,37 +70,6 @@ class Board
       array.reverse
     end
     (find_diagonals(grid) + find_diagonals(reverse_grid)).uniq
-    # diagonals_array = []
-
-    # # Do the lower-left portion of the array
-    # (size - 1).downto(0) do |row_idx|
-    #   diagonal = []
-
-    #   d_idx = 1
-    #   until diagonal.length == (size - row_idx)
-    #     diagonal << grid[size - d_idx][size - row_idx - d_idx]
-    #     d_idx += 1
-    #   end
-    #   diagonals_array << diagonal
-    # end
-
-    # # Do the upper-right portion of the array
-    # 0.upto(size-1) do |row_idx|
-    #   diagonal = []
-
-    #   d_idx = 0
-    #   until diagonal.length == (size - row_idx)
-    #     diagonal << grid[d_idx][row_idx + d_idx]
-    #     d_idx += 1
-    #   end
-
-    #   unless diagonals_array.include?(diagonal) || 
-    #          diagonals_array.include?(diagonal.reverse)
-    #     diagonals_array << diagonal
-    #   end
-    # end
-   
-    # diagonals_array
   end
 
   def [](row, col)
@@ -113,26 +82,6 @@ class Board
 
   def self.build_grid(board_size)
     Array.new(board_size) { Array.new(board_size) }
-    # [
-    #   [0,1,2],
-    #   [3,4,5],
-    #   [6,7,8]
-    # ]
-
-    # [
-    #   [ 0, 1, 2, 3],
-    #   [ 4, 5, 6, 7],
-    #   [ 8, 9,10,11],
-    #   [12,13,14,15]
-    # ]
-
-    # [
-    #   [ 0, 1, 2, 3, 4],
-    #   [ 5, 6, 7, 8, 9],
-    #   [10,11,12,13,14],
-    #   [15,16,17,18,19],
-    #   [20,21,22,23,24]
-    # ]
   end
 
   def render
