@@ -1,148 +1,201 @@
 require 'byebug'
+require 'colorize'
 
-def rec1(b, n)
-  return 1 if n == 0
-  b * rec1(b, n - 1)
+def range(start, finish)
+  return [] if start > finish
+  [start] + range(start + 1, finish)
 end
 
-def rec2(b, n)
-  return 1 if n == 0
-  return b if n == 1
+def sum(array)
+  return array.first if array.length == 1
+  array.first + sum(array.drop(1))
+end
 
+def exp_one(b, n)
+  return 1 if n.zero?
+  b * exp_one(b, n - 1)
+end
+
+def exp_two(b, n)
+  return 1 if n.zero?
+  return b if n == 1
   if n.even?
-    rec2(b, n/2) * rec2(b, n/2)
+    value = exp_two(b, n / 2)
+    value * value
   else
-    b * (rec2(b, (n-1) / 2) * rec2(b, (n-1) / 2))
+    value = exp_two(b, (n-1) / 2)
+    b * value * value
   end
 end
-
 
 class Array
   def deep_dup
-    deep_arr = []
-    self.each do |el|
-      if el.is_a?(Array)
-        deep_arr << el.deep_dup
+    duped = []
+    self.each do |elem|
+      if elem.is_a?(Array)
+        duped << elem.deep_dup
       else
-        deep_arr << el
+        duped << elem
       end
     end
-    deep_arr
+    duped
   end
 end
 
-def fib(n)
-  return [1]    if n == 1
-  return [1, 1] if n == 2
-  temp = fib(n-1)
-  temp << temp[-1] + temp[-2]
-end
-
-def fibit(n)
-  if n == 1
-    results = [1]
-  elsif n == 2
-    results = [1,1]
-  else
-    results = [1,1]
-    until results.length == n
-      results << (results[-1] + results[-2])
-    end
-  end
-  return results
+def fibonacci(num)
+  return [0]       if num == 1
+  return [0, 1]    if num == 2
+  return [0, 1, 1] if num == 3
+  fib = fibonacci(num - 1)
+  fib << fib[-2] + fib[-1]
 end
 
 def bsearch(array, target)
-  idx = array.length / 2
+  if array.length == 1
+    return nil unless target == array.first
+    return 0
+  end
 
-  return idx if array[idx] == target
-  return nil if array.length == 1 && array[idx] != target
+  midpoint = array.length / 2
+  left, right = array.take(midpoint), array.drop(midpoint)
 
-  if target < array[idx]
-    temp = bsearch(array[0...idx], target)
-    idx = idx - array[0...idx].length + temp unless temp.nil?
-  else
-    temp = bsearch(array[idx+1..-1], target)
-    idx = idx + array[idx+1..-1].length + temp - 1 unless temp.nil?
+  case target <=> array[midpoint]
+    when -1
+      bsearch(left, target)
+    when  0
+      midpoint
+    when  1
+      index = bsearch(right, target)
+      if index.nil?
+        nil
+      else
+        midpoint + index
+      end
   end
 end
 
-# Make change using large coins first
-def make_change_basic(amount, coins = [25, 10, 5, 1])
-  return [] if amount == 0 || coins.empty?
+def make_change(target, coins = [25, 10, 5, 1])
+  return [] if target == 0 || coins.empty?
+  coins.sort!.reverse!
+  best_change = nil
+  coins.each_with_index do |coin, index|
+    next if coin > target
 
-  purse = []
-  num_big = amount/coins.first
-  rem = amount % coins.first
-  num_big.times { purse << coins.first }
-  purse += mc3(rem, coins.drop(1) )
-end
+    rem = target - coin
 
-# Make change by using largest coins first but only add one
-# coin at a time
-def make_change_plus(amount, coins = [25, 10, 5 ,1])
-  return [] if coins.empty? || amount == 0
+    best_remainder = make_change(rem, coins.drop(index))
 
-  while (amount / coins.first == 0)
-    coins.shift(1)
+    next if best_remainder.nil?
+
+    this_change = [coin] + best_remainder
+
+    if (best_change.nil? || this_change.count < best_change.count)
+      best_change = this_change
+    end
   end
 
-  purse = [coins.first]
-  purse += mc(amount - coins.first, coins)
+  best_change
 end
 
-# Make change by using the smallest number of coins
-def make_change(amount, coins = [25, 10, 5, 1])
-  # Base case
-  return [] if amount == 0 || coins.empty?
+def merge_sort(array, &prc)
+  prc ||= Proc.new {|x,y| x <=> y}
 
-  possibilities = []
-  coins.each do |coin|
-    purse = []
-    new_amount = amount
-    new_coins = coins.dup
+  return array if array.length <= 1
 
-    if amount > coin
-      new_amount -= coin
-      purse << coin
+  midpoint = array.length / 2
+  left, right = array.take(midpoint), array.drop(midpoint)
+
+  merge(merge_sort(left, &prc), merge_sort(right, &prc), &prc)
+end
+
+def merge(left, right, &prc)
+  sorted = []
+  until left.empty? || right.empty?
+    case prc.call(left.first, right.first)
+    when -1
+      sorted << left.shift
     else
-      new_coins = coins.drop(1)
-    end
-    purse += mc( new_amount, new_coins )
-
-    possibilities << purse
-  end
-
-  possibilities.min_by(&:length)
-end
-
-def merge_sort(arr)
-  return arr if arr.length <= 1
-
-  idx = arr.length / 2
-  arr1 = arr.take(idx)
-  arr2 = arr.drop(idx)
-
-  merge(merge_sort(arr1), merge_sort(arr2))
-end
-
-def merge(arr1,arr2)
-  answer = []
-
-  until arr1.empty? || arr2.empty?
-    if arr1[0] < arr2[0]
-      answer << arr1.shift
-    elsif arr2[0] <= arr1[0]
-      answer << arr2.shift
+      sorted << right.shift
     end
   end
-
-  answer += arr1 + arr2
+  sorted + left + right
 end
 
 def subsets(array)
-  return [ array ] if array.empty?
-  new_val = array.pop
-  answer = subsets(array)
-  answer.concat(answer.map { |el| el + [new_val] })
+  return [[]] if array.empty?
+  sets = subsets(array.take(array.length - 1))
+  sets += sets.map do |elem|
+    elem.dup << array.last
+  end
+end
+
+
+if __FILE__ == $PROGRAM_NAME
+  system("clear")
+  # Test Range
+  puts "Recursion#Range".colorize(:red)
+  puts range(0, 5) == [0, 1, 2, 3, 4, 5]
+  puts range(4, 3) == []
+
+  puts "Recursion#Sum".colorize(:red)
+  puts sum([0,1,2,3])  == 6
+  puts sum([93, -6])   == 87
+
+  puts "Recursion#Exp_One".colorize(:red)
+  puts exp_one(2,2) == 2 ** 2
+  puts exp_one(2,3) == 2 ** 3
+  puts exp_one(2,4) == 2 ** 4
+  puts exp_one(2,9) == 2 ** 9
+
+  puts "Recursion#Exp_Two".colorize(:red)
+  puts exp_two(2,2) == 2 ** 2
+  puts exp_two(2,3) == 2 ** 3
+  puts exp_two(2,4) == 2 ** 4
+  puts exp_two(2,9) == 2 ** 9
+
+  puts "Recursion#Deep_dup".colorize(:red)
+  a = [0,1,2,3,4,[0,1,2,3],[0,[2,4]]]
+  b = a.deep_dup
+  c = a.dup
+  puts a == b
+  puts a.object_id != b.object_id
+  puts a.object_id != c.object_id
+  puts a[5].object_id != b[5].object_id
+  puts a[5].object_id == c[5].object_id
+
+  puts "Recursion#Fibonacci".colorize(:red)
+  puts fibonacci(1) == [0]
+  puts fibonacci(2) == [0, 1]
+  puts fibonacci(3) == [0, 1, 1]
+  puts fibonacci(4) == [0, 1, 1, 2]
+  puts fibonacci(5) == [0, 1, 1, 2, 3]
+  puts fibonacci(6) == [0, 1, 1, 2, 3, 5]
+
+  puts "Recursion#Binary_Search".colorize(:red)
+  a = (0...9).map { |num| num*2 }
+  puts bsearch(a,  2) == 1
+  puts bsearch(a,  6) == 3
+  puts bsearch(a, 16) == 8
+  puts bsearch(a, 10) == 5
+  puts bsearch(a, 13).nil?
+
+  puts "Recursion#Make_Change".colorize(:red)
+  puts make_change(25)            == [25]
+  puts make_change(26)            == [25, 1]
+  puts make_change(14,[10, 7, 1]) == [7, 7]
+
+  puts "Recursion#Merge_Sort".colorize(:red)
+  a = [  9,  4,  7,  3,  6,  1]
+  b = ["A","c","Z","?"]
+  c = [  1,  2,  3,  4]
+  d = Proc.new { |x, y| y <=> x }
+  puts merge_sort(a)       == a.sort
+  puts merge_sort(b)       == b.sort
+  puts merge_sort(c, &d)   == c.sort.reverse
+
+  puts "Recursion#Subsets".colorize(:red)
+  puts subsets([])        == [[]]
+  puts subsets([1])       == [[], [1]]
+  puts subsets([1, 2])    == [[], [1], [2], [1,2]]
+  puts subsets([1, 2, 3]) == [[], [1], [2], [1,2], [3], [1, 3], [2, 3], [1, 2, 3]]
 end
