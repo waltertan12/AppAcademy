@@ -2,7 +2,7 @@ require_relative 'Queen'
 require_relative 'Board'
 
 class Solver
-  attr_reader :queens, :board
+  attr_reader   :queens,    :board
   attr_accessor :solutions, :sol_count
 
   def initialize(queens = 8)
@@ -12,12 +12,13 @@ class Solver
     @queens    = queens
   end
 
-  def place_queens_i
+  def place_queens
     solutions_array      = []
     locations            = []
 
     row_start, col_start = 0, 0
     queens_placed        = 0
+
     until (row_start >= queens && col_start >= queens - 1) || sol_count == solutions
       (row_start...queens).each do |row|
         if row != row_start
@@ -58,8 +59,8 @@ class Solver
         row_start = x
         col_start = y
       end
-
     end
+
     solutions_array
   end
 
@@ -74,12 +75,9 @@ class Solver
     end
   end
 
-  # Depth first searching of a solution
-  # Start at [0, 0] and place a queen, then view all 
+  # Recursive depth first search
   def solve(row)
     (0...queens).each do |col|
-      # render
-      # sleep 0.5
       place_queen(row, col)
 
       unless board.conflict?
@@ -115,5 +113,5 @@ if __FILE__ == $PROGRAM_NAME
   queens = gets.chomp.to_i
   s = Solver.new(queens)
   s.solve(0)
-  s.place_queens_i
+  s.place_queens
 end
