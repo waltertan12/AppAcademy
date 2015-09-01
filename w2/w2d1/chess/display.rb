@@ -13,9 +13,18 @@ include Cursorable
   end
 
   def build_grid
-    @board.grid.map.with_index do |row, i|
+    board_to_display = @board.grid.map.with_index do |row, i|
       build_row(row, i)
     end
+    potential_piece = @board[*@cursor_pos]
+    if potential_piece.occupied?
+      to_highlight = potential_piece.valid_moves
+      to_highlight.each do |move|
+        x, y = move
+        board_to_display[x][y] = @board[x,y].to_s.colorize( { background: :yellow } )
+      end
+    end
+    board_to_display
   end
 
   def build_row(row, i)
