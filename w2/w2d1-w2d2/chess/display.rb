@@ -1,33 +1,42 @@
 require_relative 'board'
-require 'colorize'
 require_relative 'cursorable'
 require_relative 'piece_manifest'
+require 'colorize'
 
 class Display
-attr_accessor :selected
-include Cursorable
+  attr_accessor :selected_piece_moves, :color_to_highlight
+  include Cursorable
 
   def initialize(board)
-      @board = board
-      @cursor_pos = [0, 0]
-      @selected = []
+    @board = board
+    @cursor_pos = [0, 0]
+    @selected_piece_moves = []
+    @selected_pos = []
+    @color_to_highlight = :white
   end
 
   def build_grid
     grid_display = @board.grid.map.with_index do |row, i|
       build_row(row, i)
     end
-    if @selected.empty?
+    if @selected_piece_moves.empty?
       highlight_cursor(grid_display)
     else
       grid_display
     end
+  end
 
+  def change_color
+    if color_to_highlight == :white
+      self.color_to_highlight = :black
+    else
+      self.color_to_highlight = :white
+    end
   end
 
   def highlight_cursor(grid_display)
-    if @board[*@cursor_pos].occupied?
-      current_piece = @board[*@cursor_pos]
+    current_piece = @board[*@cursor_pos]
+    if current_piece.occupied? && current_piece.color == color_to_highlight
       to_highlight = current_piece.legal_moves
       to_highlight.each do |pos|
         x, y = pos
@@ -43,11 +52,14 @@ include Cursorable
   end
 
   def moves_to_highlight(piece)
-    @selected = piece.legal_moves
+    @selected_piece_moves = piece.legal_moves
+    @selected_pos = piece.position
+    puts "Moves to hightlight: #{@selected_pos} or #{piece.position}"
   end
 
-  def un_highlight
-    @selected = []
+  def unhighlight
+    @selected_piece_moves = []
+    @selected_pos = []
   end
 
   def build_row(row, i)
@@ -61,8 +73,10 @@ include Cursorable
     piece_color = @board[i, j].color
     if [i, j] == @cursor_pos
       bg = :light_black
-    elsif @selected.include?([i, j])
+    elsif @selected_piece_moves.include?([i, j])
       bg = :yellow
+    elsif @selected_pos == [i, j]
+      bg = :magenta
     elsif (i + j).odd?
       bg = :light_green
     else
@@ -73,8 +87,10 @@ include Cursorable
 
   def render
     system("clear")
-    # puts "Fill the grid!"
-    puts "Arrow keys, WASD, or vim to move, space or enter to confirm."
+    puts "N C\na h\nr e\nr s\no s\nw \n!!"
+    puts "The most narrow chess you will ever play."
+    puts "Rules: Play until you win."
+    puts "Arrow keys to move, space or enter to confirm."
     build_grid.each_with_index { |row, idx| puts (8-idx).to_s + row.join }
     puts " ABCDEFGH"
   end

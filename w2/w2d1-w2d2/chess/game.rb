@@ -3,13 +3,12 @@ require_relative 'display'
 require_relative 'error'
 
 class Game
-  attr_accessor :selected
-
   def initialize
     @board = Board.new
     @display = Display.new(@board)
     @players = [:white, :black]
-    @selected = false
+    @selected_piece = nil
+    @selected_pos = []
   end
 
   def play
@@ -20,107 +19,75 @@ class Game
     game_over_message
   end
 
+  private
+  attr_accessor :selected_pos, :selected_piece, :selected_pos, :players
+  attr_reader   :display, :board
+
   def over?
     @board.checkmate?(:white) || @board.checkmate?(:black)
   end
 
   def welcome_message
+    system("clear")
     puts "Welcome to Narrow Chess!!!!!!!"
+    puts "e\nl\nc\no\nm\ne\n \nt\no\n \nN\na\nr\nr\no\nw\n \nC\nh\ne\ns\ns"
+    sleep (2)
   end
 
   def game_over_message
-    @display.render
+    display.render
     puts "No more narrow chess..."
   end
 
-  # def make_move
-  #   coords = get_input
-  #   if !@selected.empty
-  #     move_piece(@board[*@selected], coords)
-  #     @selected = []
-  #   elsif !coords.nil?
-  #     selected_piece = @board[*coords]
-  #     @selected = coords
-  #     @display.moves_to_highlight(selected_piece)
-  #   end
-  # end
-  #
-  # def move_piece(piece, end_pos)
-  #   @board.move(piece, end_pos)
-
   def make_move
-    # piece = select_piece
-    # move_piece(piece)
-    puts "Select a piece"
-    selection = get_input
-    if selection && valid_selection?(selection)
-      selected_piece = @board[*selection]
-      @display.moves_to_highlight(selected_piece)
-      puts "Move the piece"
-      begin
-        puts "You selected a #{selected_piece}"
-        end_pos = get_input
-        until valid_pos(end_pos)
-          # puts "You selected a #{selected_piece}"
-          end_pos = get_input
-          @display.render
+    coords = get_input
+    if moving_piece?(coords)
+      if coords == selected_pos
+        clear_selection
+      else
+        begin
+          move_piece(selected_piece, coords)
+          display.change_color
+          players.rotate!
+        rescue MoveError
+          puts "Invalid move"
+          clear_selection
         end
-
-        if end_pos != selection
-          @board.move(selected_piece, end_pos)
-          @players.rotate!
-        else
-          puts "Select a piece"
-        end
-        @display.un_highlight
-      rescue MoveError
-        puts "Invalid selection"
-        retry
       end
+      display.unhighlight
+    elsif selecting_piece?(coords)
+      make_selection(coords)
     end
   end
 
-  # def select_piece
-  #   puts "select a piece"
-  #   selection = get_input
-  #   if selection && valid_selection?(selection)
-  #     @display.moves_to_highlight(selected_piece)
-  #     puts "You selected a '#{selected_piece.to_s}'"
-  #     selected_piece = @board[*selection]
-  #   end
-  # end
-  #
-  # def move_piece(piece)
-  #   puts "Move the piece"
-  #   begin
-  #     end_pos = get_input
-  #     until valid_pos(end_pos)
-  #       end_pos = get_input
-  #       @display.render
-  #     end
-  #
-  #     if end_pos != piece.position
-  #       @board.move(piece, end_pos)
-  #       @players.rotate!
-  #     # else
-  #     #   puts "Select a piece"
-  #     end
-  #     @display.un_highlight
-  #   rescue MoveError
-  #     puts "Invalid selection"
-  #     retry
-  #   end
-  # end
+  def clear_selection
+    self.selected_pos = []
+    self.selected_piece = nil
+  end
 
+  def selecting_piece?(coords)
+    !coords.nil? && board[*coords].color == players.first
+  end
 
-  def valid_selection?(coords)
-    # return false if coords.nil?
-    @board[*coords].color == @players.first
+  def moving_piece?(coords)
+    !selected_piece.nil? && !coords.nil?
+  end
+
+  def make_selection(coords)
+    pos   = coords
+    self.selected_piece = @board[*coords]
+    display.moves_to_highlight(selected_piece)
+  end
+  
+  def move_piece(piece, end_pos)
+    board.move(piece, end_pos)
+    self.selected_piece = nil
+    self.selected_pos   = []
   end
 
   def play_turn
     render
-    puts "#{@players.first} turn"
+    puts "#{@players.first.to_s.capitalize} turn"
     make_move
   end
 

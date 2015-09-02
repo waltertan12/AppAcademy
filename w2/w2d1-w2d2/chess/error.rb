@@ -1,3 +1,2 @@
 class MoveError < StandardError
-  
 end
