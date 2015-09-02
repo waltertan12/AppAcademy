@@ -19,13 +19,17 @@ class Solver
     row_start, col_start = 0, 0
     queens_placed        = 0
 
-    until (row_start >= queens && col_start >= queens - 1) || sol_count == solutions
+    until (row_start >= queens && col_start >= queens - 1) #|| sol_count == solutions
       (row_start...queens).each do |row|
         if row != row_start
           col_start = 0
         end
         (col_start...queens).each do |col|
+          # puts "hi"
+          system("clear")
           place_queen(row, col)
+          render_highlight([row, col])
+          sleep(0.01)
           if board.conflict?
             remove_queen(row, col)
           else
@@ -100,6 +104,10 @@ class Solver
 
   def remove_queen(row, col)
     board[row, col] = nil
+  end
+
+  def render_highlight(coords)
+    board.render_highlight(coords)
   end
 
   def render

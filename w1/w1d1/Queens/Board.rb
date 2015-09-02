@@ -1,3 +1,4 @@
+require 'colorize'
 class Board
   attr_accessor :grid
   attr_reader   :size
@@ -82,6 +83,40 @@ class Board
 
   def self.build_grid(board_size)
     Array.new(board_size) { Array.new(board_size) }
+  end
+
+  def render_highlight(coords)
+    print "  "
+    (0...size).each do |idx|
+      print "#{idx} "
+    end
+    print "\n"
+
+    (0...size).each do |row|
+      print "#{row} "
+      (0...size).each do |col|
+        if [row, col] == coords
+          color_options = {background: :light_yellow}
+        else
+          color_options = {background: :magenta}
+        end
+        if grid[row][col].nil?
+          if [row, col] == coords
+            print "- ".colorize(color_options)
+          else
+            print "- "
+          end
+        else
+          if [row, col] == coords
+            print "- ".colorize(color_options)
+          else
+            print "#{grid[row][col].to_s} "
+          end
+        end
+      end
+      print "\n"
+    end
+    nil
   end
 
   def render
