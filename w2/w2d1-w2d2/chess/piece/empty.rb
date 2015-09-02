@@ -1,11 +1,15 @@
 require_relative '../piece'
 class EmptyPiece < Piece
 
-  def initialize(board, pos)
-    super(board, pos, :none)
+  def initialize(board, pos, color = :none)
+    super(board, pos, color)
   end
 
   def valid_moves
+    []
+  end
+
+  def all_moves
     []
   end
 

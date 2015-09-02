@@ -12,7 +12,7 @@ class Bishop < Piece
     "B"
   end
 
-  def valid_moves
-    possible_moves(DIRECTIONS[:diagonal])
+  def all_moves
+    slideable_moves(DIRECTIONS[:diagonal])
   end
 end

@@ -10,7 +10,7 @@ module Steppable
     ]
   }
 
-  def possible_moves(move_type)
+  def steppable_moves(move_type)
     moves = []
 
     move_type.each do |move|
@@ -35,7 +35,7 @@ module Slideable
     :diagonal => [[1, 1], [1, -1], [-1, 1], [-1, -1]]
   }
 
-  def possible_moves(dir)
+  def slideable_moves(dir)
     moves = []
 
     dir.each do |move|
