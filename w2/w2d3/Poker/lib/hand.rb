@@ -65,6 +65,18 @@ class Hand
     end
   end
 
+  def compare_hands(other_hand)
+    own_hand = check_hand
+    case HAND_PRIORITY.index(own_hand) <=> HAND_PRIORITY.index(other_hand)
+      when -1
+        own_hand
+      when  0 
+
+      when  1
+        other_hand
+    end
+  end
+
   private
 
   def flush?

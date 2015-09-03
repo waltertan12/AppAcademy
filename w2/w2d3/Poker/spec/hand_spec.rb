@@ -138,4 +138,21 @@ describe Hand do
       expect(hand.check_hand).to eq(:high_card)
     end
   end
+
+  describe "#compare_hands" do
+    subject(:three_kind_deck)     { Deck.new([ Card.new(:hearts,   4),
+                                               Card.new(:spades,   4),
+                                               Card.new(:diamonds, 4),
+                                               Card.new(:clubs,    9),
+                                               Card.new(:hearts, 10)])}
+
+    it "should know which hand is greater" do
+      three_kind_hand = Hand.new(three_kind_deck)
+      three_kind_hand.take(5)
+      expect(three_kind_hand.compare_hands(:straight)).to eq(:straight)
+      expect(three_kind_hand.compare_hands(:high_card)).to eq(:three_of_a_kind)
+    end
+
+    it "should handle ties"
+  end
 end
