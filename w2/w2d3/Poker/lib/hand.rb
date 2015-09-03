@@ -42,26 +42,43 @@ class Hand
   end
 
   def check_hand
+    tiebreak = :none
     if royal_flush?
-      :royal_flush
+      hand = :royal_flush
+      tiebreak = :none
     elsif straight_flush?
-      :straight_flush
+      hand = :straight_flush
+      tiebreak = high_card
     elsif of_a_kind?(4)
-      :four_of_a_kind
+      hand = :four_of_a_kind
+
     elsif full_house?
-      :full_house
+      hand = :full_house
+
     elsif flush?
-      :flush
+      hand = :flush
+
     elsif straight?
-      :straight
+      hand = :straight
+
     elsif of_a_kind?(3)
-      :three_of_a_kind
+      hand = :three_of_a_kind
+
     elsif two_pair?
-      :two_pair
+      hand = :two_pair
+
     elsif of_a_kind?(2)
-      :two_of_a_kind
+      hand = :two_of_a_kind
+
     else
-      :high_card
+      hand = :high_card
+    end
+    result = {hand: hand, tiebreak: tiebreak}
+    result[:hand]
+  end
+
+  def kicker
+    if check_hand
     end
   end
 
