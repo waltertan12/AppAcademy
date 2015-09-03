@@ -1,7 +1,7 @@
 class Card
   attr_reader :suit, :value
 
-  SUITS = [:hearts, :spades, :clubs, :diamonds]
+  SUITS = [ :hearts, :spades, :clubs, :diamonds ]
   VALUES = (2..14).to_a
 
   def initialize(suit, value)
@@ -26,7 +26,7 @@ class Card
   end
 
   def <=>(card)
-    value <=> card.value
+    self.value <=> card.value
   end
 
   def self.values

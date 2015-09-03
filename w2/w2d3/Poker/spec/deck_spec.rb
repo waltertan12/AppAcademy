@@ -5,14 +5,14 @@ require "rspec"
 describe Deck do
   subject(:deck) { Deck.new }
   let(:unshuffled) { Deck.new.deck }
-  let(:tiny_deck) { [Card.new(:hearts, 3),
-                    Card.new(:clubs,  7),
-                    Card.new(:spades, 5),
-                    Card.new(:hearts, 14)]}
+  let(:tiny_deck)  {[Card.new(:hearts, 3),
+                     Card.new(:clubs,  7),
+                     Card.new(:spades, 5),
+                     Card.new(:hearts, 14)]}
 
 
   describe "#initialize" do
-    it "should have 52 cards w/ no jokers tho!" do
+    it "should have 52 cards" do
       deck_array = deck.deck
       expect(deck_array.length).to eq(52)
     end

@@ -13,12 +13,10 @@ class Deck
   end
 
   def take(number_of_cards)
-    # debugger
     taken_cards = deck.take(number_of_cards)
     self.deck = self.deck.drop(number_of_cards)
     taken_cards
   end
-
 
   private
   def create_deck
