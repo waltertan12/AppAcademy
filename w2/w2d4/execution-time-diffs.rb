@@ -18,8 +18,6 @@ def my_min_ia(arr) #time complexity is n^2
   end
 end
 
-
-
 def my_min_ii(arr) #time complexity is n
   min = arr[0]
   (1...arr.length).each do |i|
@@ -27,8 +25,6 @@ def my_min_ii(arr) #time complexity is n
   end
   min
 end
-
-
 
 def contig_sum_i(arr) # time complexity is n^2
   subs = []
@@ -45,8 +41,6 @@ maxsub = subs[0].reduce(:+)
   end
   maxsub
 end
-
-
 
 def contig_sum_ii(arr)  # time complexity is n ^____^
   current_sum = arr[0]
