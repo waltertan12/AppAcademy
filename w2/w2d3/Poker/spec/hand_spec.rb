@@ -2,10 +2,24 @@ require 'hand'
 require 'rspec'
 
 describe Hand do
-  subject(:deck) { Deck.new([Card.new(:hearts, 3),
-                             Card.new(:clubs,  7),
-                             Card.new(:spades, 5),
-                             Card.new(:hearts, 14)]) }
+  let(:ace_of_spades ) { double("ace_of_spades", 
+                                 suit: :spade, 
+                                 value: 14) }
+  let(:seven_of_clubs) { double("seven_of_clubs", 
+                                 suit: :clubs, 
+                                 value: 7) }
+  let(:five_of_spades) { double("five_of_spades", 
+                                 suit: :spade, 
+                                 value: 5) }
+  let(:ace_of_hearts)  { double("ace_of_hearts", 
+                                 suit: :hearts, 
+                                 value: 14) }
+
+  subject(:deck) { Deck.new([ace_of_spades,
+                             seven_of_clubs,
+                             five_of_spades,
+                             ace_of_hearts]) }
+
   subject(:hand) { Hand.new(deck) }
 
   describe "#initialize" do
@@ -17,17 +31,17 @@ describe Hand do
 
   describe "#take" do
     it "should take cards from deck and store in hand" do
-      expect(hand.take(2)).to eq([Card.new(:hearts, 3),
-                                  Card.new(:clubs,  7)])
-      expect(hand.cards).to   eq([Card.new(:hearts, 3),
-                                  Card.new(:clubs,  7)])
+      expect(hand.take(2)).to eq([ace_of_spades,
+                                  seven_of_clubs])
+      expect(hand.cards).to   eq([ace_of_spades,
+                                  seven_of_clubs])
     end
   end
 
   describe "#discard" do
     it "should remove a card from the hand" do
       hand.take(1)
-      expect(hand.cards).to eq([Card.new(:hearts, 3)])
+      expect(hand.cards).to eq([ace_of_spades])
       hand.discard(0)
       expect(hand.cards).to be_empty
     end

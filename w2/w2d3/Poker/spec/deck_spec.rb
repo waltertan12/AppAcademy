@@ -4,11 +4,27 @@ require "rspec"
 
 describe Deck do
   subject(:deck) { Deck.new }
+  
   let(:unshuffled) { Deck.new.deck }
-  let(:tiny_deck)  {[Card.new(:hearts, 3),
-                     Card.new(:clubs,  7),
-                     Card.new(:spades, 5),
-                     Card.new(:hearts, 14)]}
+  
+  let(:ace_of_spades ) { double("ace_of_spades", 
+                                 suit: :spade, 
+                                 value: 14) }
+  let(:seven_of_clubs) { double("seven_of_clubs", 
+                                 suit: :clubs, 
+                                 value: 7) }
+  let(:five_of_spades) { double("five_of_spades", 
+                                 suit: :spade, 
+                                 value: 5) }
+  let(:ace_of_hearts)  { double("ace_of_hearts", 
+                                 suit: :hearts, 
+                                 value: 14) }
+
+  let(:tiny_deck)  {[ace_of_spades,
+                     seven_of_clubs,
+                     five_of_spades,
+                     ace_of_hearts]}
+
 
 
   describe "#initialize" do
