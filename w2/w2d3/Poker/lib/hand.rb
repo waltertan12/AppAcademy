@@ -78,8 +78,9 @@ class Hand
   end
 
   def kicker
-    if check_hand
-    end
+    if two_pair?
+      
+    elsif of_a_kind?(2)
   end
 
   def compare_hands(other_hand)
