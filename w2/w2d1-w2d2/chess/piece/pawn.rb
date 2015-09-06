@@ -44,7 +44,7 @@ class Pawn < Piece
 
   def all_moves
     deltas = move_diffs
-    deltas.shift if moved
+    deltas.shift if move_two?
     moves = []
 
     deltas.each do |delta|
@@ -66,11 +66,15 @@ class Pawn < Piece
     moves
   end
 
+  def move_two?
+    deltas = move_diffs
+    x, y = position
+    dx, dy = deltas[1]
+    moved || board[x + dx, y + dy].occupied?
+  end
+
   def promote?
-    # if
     (color == :black && position.first == 7) || 
-       (color == :white && position.first == 0)
-    #   board[*position] = Queen.new(board, position, color)
-    # end
+    (color == :white && position.first == 0)
   end
 end
