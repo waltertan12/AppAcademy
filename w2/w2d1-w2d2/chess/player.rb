@@ -34,6 +34,7 @@ class ComputerPlayer
   end
 
   def get_input(display)
+    sleep(0.1)
     # coords = select_random
     if @piece_to_move.nil?
       piece_and_move = select_smart

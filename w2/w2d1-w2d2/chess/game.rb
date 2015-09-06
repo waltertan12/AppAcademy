@@ -31,16 +31,19 @@ class Game
   def initialize_players
     puts "1: Human vs Human"
     puts "2: Human vs Computer"
+    puts "3: Computer vs Computer"
     print "> "
     setting = nil
-    until !setting.nil? && setting < 3 && setting > 0
+    until !setting.nil? && setting < 4 && setting > 0
       setting = gets.chomp.to_i
     end
     case setting
       when 1
         players = [HumanPlayer.new(:white, board), HumanPlayer.new(:black, board)] 
       when 2
-        players = [HumanPlayer.new(:white, board), ComputerPlayer.new(:black, board)] 
+        players = [HumanPlayer.new(:white, board), ComputerPlayer.new(:black, board)]
+      when 3
+        players = [ComputerPlayer.new(:white, board), ComputerPlayer.new(:black, board)] 
     end
     players
   end
