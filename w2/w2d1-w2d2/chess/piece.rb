@@ -25,7 +25,6 @@ class Piece
     @position = pos
   end
 
-
   def occupied?
     true
   end
