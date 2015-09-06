@@ -93,6 +93,16 @@ class Board
     end
   end
 
+  def stalemate?(color)
+    color_pieces = all_pieces.select do |piece|
+      piece.color == color
+    end
+    stale = color_pieces.all? do |piece|
+       piece.legal_moves.empty?
+    end
+    stale && !checkmate?(color)
+  end
+
   def all_pieces
     grid.flatten
   end
@@ -139,5 +149,14 @@ class Board
       when "bishop"
         self[*pos] = Bishop.new(self, pos, color)
     end
+  end
+  
+  def self.stalemate_board
+    stale_board = Board.new(false)
+    stale_board.generate_empty_board
+    stale_board[0,5] = King.new(stale_board,  [0, 5], :white)
+    stale_board[1,2] = Queen.new(stale_board, [1, 2], :black)
+    stale_board[2,3] = Queen.new(stale_board, [2, 3], :black)
+    stale_board
   end
 end
