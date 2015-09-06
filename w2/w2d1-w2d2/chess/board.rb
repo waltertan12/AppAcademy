@@ -17,15 +17,23 @@ class Board
   end
 
   def populate
-    pieces = [Rook.new(self, [0,0], :black), Rook.new(self, [0,7], :black),
-            Rook.new(self, [7,0], :white), Rook.new(self, [7,7], :white),
-            Knight.new(self, [0,1], :black), Knight.new(self, [0,6], :black),
-            Knight.new(self, [7,1], :white), Knight.new(self, [7,6], :white),
-            Bishop.new(self, [0,2], :black), Bishop.new(self, [0,5], :black),
-            Bishop.new(self, [7,2], :white), Bishop.new(self, [7,5], :white),
-            Queen.new(self, [0,3], :black), Queen.new(self, [7,3], :white),
-            King.new(self, [0,4], :black), King.new(self, [7,4], :white),
-          ]
+    pieces = [Rook.new(self, [0,0], :black), 
+              Rook.new(self, [0,7], :black),
+              Rook.new(self, [7,0], :white), 
+              Rook.new(self, [7,7], :white),
+              Knight.new(self, [0,1], :black), 
+              Knight.new(self, [0,6], :black),
+              Knight.new(self, [7,1], :white), 
+              Knight.new(self, [7,6], :white),
+              Bishop.new(self, [0,2], :black), 
+              Bishop.new(self, [0,5], :black),
+              Bishop.new(self, [7,2], :white), 
+              Bishop.new(self, [7,5], :white),
+              Queen.new(self, [0,3], :black), 
+              Queen.new(self, [7,3], :white),
+              King.new(self, [0,4], :black), 
+              King.new(self, [7,4], :white),]
+
     8.times do |num|
       pieces << Pawn.new(self, [1, num], :black)
       pieces << Pawn.new(self, [6, num], :white)
@@ -101,5 +109,35 @@ class Board
       piece.is_king? && piece.color == color
     end
     king && king.position
+  end
+
+  def promote_pawns
+    all_pieces.each do |piece| 
+      if piece.promote?
+        pos = piece.position
+        color = piece.color
+        promotion_selection(pos, color)
+      end
+    end
+  end
+
+  def promotion_selection(pos, color)
+    selection = ["queen","knight","rook","bishop","pawn"]
+    puts "You can now promote your pawn!"
+    puts "Type in 'Queen', 'Knight', 'Rook', 'Bishop', or 'Pawn' to create a new piece"
+    piece = nil
+    until selection.include?(piece)
+      piece = gets.chomp.downcase
+    end
+    case piece
+      when "queen"
+        self[*pos] = Queen.new(self, pos, color)
+      when "knight"
+        self[*pos] = Knight.new(self, pos, color)
+      when "rook"
+        self[*pos] = Rook.new(self, pos, color)
+      when "bishop"
+        self[*pos] = Bishop.new(self, pos, color)
+    end
   end
 end

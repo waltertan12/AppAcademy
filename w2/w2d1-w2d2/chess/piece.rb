@@ -38,4 +38,8 @@ class Piece
   def inspect
     "#{self.to_s}: #{self.object_id}, Board: #{board.object_id}, Color: #{self.color}, Position #{self.position}"
   end
+
+  def promote?
+    false
+  end
 end

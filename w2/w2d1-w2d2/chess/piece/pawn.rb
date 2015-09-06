@@ -16,12 +16,6 @@ class Pawn < Piece
     0
   end
 
-  # def vertical_steps
-  # end
-  #
-  # def diagonal_steps
-  # end
-
   def move_diffs
     # Add check for moved pawn here
     # Add diagonal check here
@@ -72,5 +66,11 @@ class Pawn < Piece
     moves
   end
 
-
+  def promote?
+    # if
+    (color == :black && position.first == 7) || 
+       (color == :white && position.first == 0)
+    #   board[*position] = Queen.new(board, position, color)
+    # end
+  end
 end

@@ -90,6 +90,7 @@ class Game
     render
     puts "#{@players.first.to_s.capitalize} turn"
     make_move
+    board.promote_pawns
   end
 
   def valid_pos(input)
