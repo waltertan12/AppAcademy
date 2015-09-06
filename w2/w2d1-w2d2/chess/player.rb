@@ -33,11 +33,26 @@ class ComputerPlayer
     @next_move = nil
   end
 
+  # def get_input(display)
+  #   sleep(0.1)
+  #   # coords = select_random
+  #   if @piece_to_move.nil?
+  #     piece_and_move = select_smart
+  #     @piece_to_move = piece_and_move.first
+  #     @next_move     = piece_and_move.last
+  #     coords         = @piece_to_move.position
+  #   else
+  #     coords = @next_move
+  #     @next_move, @piece_to_move = nil, nil
+  #   end
+  #   coords
+  # end
+
   def get_input(display)
-    sleep(0.1)
-    # coords = select_random
+    sleep(0.025)
     if @piece_to_move.nil?
-      piece_and_move = select_smart
+      piece_and_move = select_smarter
+      p piece_and_move
       @piece_to_move = piece_and_move.first
       @next_move     = piece_and_move.last
       coords         = @piece_to_move.position
@@ -76,7 +91,7 @@ class ComputerPlayer
         # tile = duped_board[*move]
         tile = board[*move]
         if take_piece?(tile)
-          puts "TAke piece"
+          puts "Take piece"
           if Points[tile.class] > max_score
             max_score = Points[tile.class]
             piece_to_move = piece
@@ -90,12 +105,68 @@ class ComputerPlayer
       end
     end
     piece_to_move, coords = pieces_and_moves.sample if max_score == 0
-    puts "max: #{max_score}, piece: #{piece_to_move}, move: #{coords}"
+    # puts "max: #{max_score}, piece: #{piece_to_move}, move: #{coords}"
     [piece_to_move, coords]
+  end
+
+  def select_smarter
+    score, piece, move = nil, nil, nil
+
+    first_moves = children(board, my_pieces(board))
+
+    first_moves.each do |move_hash|
+      current_board = move_hash[:board]
+      c = children(current_board, opponent_pieces(current_board))
+      c.each do |second_move_hash|
+        move_hash[:score] += second_move_hash[:score]
+      end
+    end
+
+    first_moves.each do |move_hash|
+      if score.nil? || move_hash[:score] > score
+        score = move_hash[:score]
+        piece = move_hash[:piece]
+        move  = move_hash[:move]
+      end
+    end
+
+    if score == 0
+      piece_and_move = first_moves.sample
+      piece = piece_and_move[:piece]
+      move  = piece_and_move[:move]
+    end
+
+    [piece, move]
   end
 
   def take_piece?(tile)
     tile.occupied? && tile.color == @opposing_color
+  end
+
+  def lose_piece?(tile)
+    tile.occupied? && tile.color == @color
+  end
+
+  def children(parent_board, pieces)
+    children_arr = []
+    score = 0
+    pieces.each do |piece|
+      piece.legal_moves.each do |move|
+        duped_board = parent_board.dup
+        current_piece = duped_board[*piece.position]
+        tile = duped_board[*move]
+
+        if take_piece?(tile)
+          score += Points[tile.class]
+        elsif lose_piece?(tile)
+          score -= Points[tile.class]
+        end
+        # puts "Piece: #{current_piece}, Position: #{current_piece.position}, Move: #{move}, Score: #{score}"
+        duped_board.move(current_piece, move)
+        children_arr << {board: duped_board, piece: piece, move: move, score: score}
+      end
+    end
+    children_arr
   end
 
   # def move_smart
@@ -147,6 +218,12 @@ class ComputerPlayer
   def my_pieces(board)
     board.all_pieces.select do |piece|
       piece.color == color
+    end
+  end
+
+  def opponent_pieces(board)
+    board.all_pieces.select do |piece|
+      piece.color != color
     end
   end
 end
