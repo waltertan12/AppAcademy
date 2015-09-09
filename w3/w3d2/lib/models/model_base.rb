@@ -18,7 +18,7 @@ class ModelBase
   end
 
   def self.all
-    hashes = QuestionsDatabase.instance.execute(<<-SQL, id)
+    hashes = QuestionsDatabase.instance.execute(<<-SQL)
       SELECT
         *
       FROM

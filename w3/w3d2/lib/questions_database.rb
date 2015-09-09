@@ -6,7 +6,7 @@ class QuestionsDatabase < SQLite3::Database
   include Singleton
 
   def initialize
-    super('questions.db')
+    super('lib/questions.db')
 
     self.results_as_hash = true
     self.type_translation = true
@@ -16,17 +16,17 @@ end
 if __FILE__ == $PROGRAM_NAME
   # p "User::find_by_id(1)"
   # p User.find_by_id(1)
-  #
+  
   # p "Question::find_by_author_id(1)"
   # q = Question.find_by_author_id(1)
   # p q
-  #
+  
   # p "Reply::find_by_user_id"
   # p Reply.find_by_user_id(2)
-  #
+  
   # p "Reply::find_by_question_id"
   # p Reply.find_by_question_id(1)
-  #
+  
   # p "User::find_by_name"
   # ned = User.find_by_name("Ned", "Stark")
   # p ned
@@ -79,19 +79,19 @@ if __FILE__ == $PROGRAM_NAME
   # p "Questions::most_liked"
   # p Question.most_liked(1)
   #
-  # p "User#average_karma"
-  # p ned.average_karma
+  p "User#average_karma"
+  p User.find_by_id(5).average_karma
 
-  p "testing save function for user"
-  new_user = User.new({"fname" => "James", "lname" => "Peach"})
-  new_user.save
-  p User.find_by_id(4)
+  # p "testing save function for user"
+  # new_user = User.new({"fname" => "James", "lname" => "Peach"})
+  # new_user.save
+  # p User.find_by_id(4)
 
-  p "testing update function for user"
-  new_user.fname = "Bill"
-  new_user.save
+  # p "testing update function for user"
+  # new_user.fname = "Bill"
+  # new_user.save
   # p Reply.find_by_id(1)
-  p User.find_by_id(4)
+  # p User.find_by_id(4)
   # #
 
   # "testing update function for user"

@@ -1,5 +1,5 @@
 require_relative '../questions_database'
-# require_relative '../model_manifest'
+require_relative '../model_manifest'
 require_relative 'model_base'
 
 class User < ModelBase
@@ -46,43 +46,15 @@ class User < ModelBase
     karma = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
         COUNT(DISTINCT questions.id) AS questions_asked,
-        CAST(COUNT(*) AS FLOAT) AS total_likes
+        CAST(COUNT(question_likes.id) AS FLOAT) AS total_likes
       FROM
         questions
       LEFT OUTER JOIN
         question_likes ON questions.id = question_likes.question_id
       WHERE
-        question_likes.user_id = ?
+        questions.author_id = ?
     SQL
 
     karma.first['total_likes'] / karma.first['questions_asked']
   end
-
-  # def save
-  #   if id
-  #
-  #     # Update
-  #     QuestionsDatabase.instance.execute(<<-SQL, first_name: fname, last_name: lname, pk: id)
-  #       UPDATE
-  #         users
-  #       SET
-  #         fname = :first_name, lname = :last_name
-  #       WHERE
-  #         id = :pk
-  #     SQL
-  #   else
-  #     # Insert
-  #     args = {first_name: fname, last_name: lname}
-  #     row_stuff = "fname, lname"
-  #     # db = QuestionsDatabase.instance.execute(<<-SQL, first_name: fname, last_name: lname)
-  #     db = QuestionsDatabase.instance.execute(<<-SQL, args)
-  #       INSERT INTO
-  #         users(#{row_stuff})
-  #       VALUES
-  #         (:first_name, :last_name)
-  #     SQL
-  #
-  #     self.id = QuestionsDatabase.instance.last_insert_row_id
-  #   end
-  # end
 end

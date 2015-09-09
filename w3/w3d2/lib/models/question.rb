@@ -3,7 +3,7 @@ require_relative 'model_base'
 
 class Question < ModelBase
   attr_accessor :id, :title, :body, :author_id
-  @table = 'questions'
+  TABLE = 'questions'
 
   def self.find_by_author_id(author_id)
     question_hashes = QuestionsDatabase.instance.execute(<<-SQL, author_id)

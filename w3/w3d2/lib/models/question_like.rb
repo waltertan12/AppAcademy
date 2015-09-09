@@ -3,7 +3,7 @@ require_relative 'model_base'
 
 class QuestionLike < ModelBase
   attr_accessor :id, :question_id, :user_id
-  @table = 'question_likes'
+  TABLE = 'question_likes'
 
   def self.likers_for_question_id(question_id)
     user_hashes = QuestionsDatabase.instance.execute(<<-SQL, question_id)

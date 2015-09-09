@@ -3,7 +3,7 @@ require_relative 'model_base'
 
 class QuestionFollow < ModelBase
   attr_accessor :id, :question_id, :user_id
-  @table = 'question_follows'
+  TABLE = 'question_follows'
 
 
 

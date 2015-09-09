@@ -3,7 +3,7 @@ require_relative 'model_base'
 
 class Reply < ModelBase
   attr_accessor :id, :body, :question_id, :user_id, :parent_id
-  @table = 'replies'
+  TABLE = 'replies'
 
   def initialize(options = {})
     @id = options['id']
