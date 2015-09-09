@@ -30,6 +30,52 @@ class ModelBase
       end
   end
 
+  def self.where(options = {})
+    where_str = options.map do |key, val|
+      key.to_s + " = " + ":" + key.to_s
+    end.join(" AND ")
+
+    hashes = QuestionsDatabase.instance.execute(<<-SQL, options)
+      SELECT
+        *
+      FROM
+        #{self::TABLE}
+      WHERE
+        #{where_str}
+    SQL
+
+    hashes.map do |hash|
+      self.new(hash)
+    end
+  end
+
+  def self.method_missing(sym, *args, &block)
+    columns = sym.to_s.sub("find_by_","").split("_and_")
+    
+    hash_args = {}
+
+    columns.each_with_index do |column, index|
+      hash_args[column] = args[index]
+    end
+
+    where_str = hash_args.map do |key, val|
+      key.to_s + " = " + ":" + key.to_s
+    end.join(" AND ")
+
+    hashes = QuestionsDatabase.instance.execute(<<-SQL, hash_args)
+        SELECT
+          *
+        FROM
+          #{self::TABLE}
+        WHERE
+          #{where_str}
+      SQL
+
+    hashes.map do |hash|
+      self.new(hash)
+    end
+  end
+
   def save
     inst_vars = self.instance_variables.drop(1)
     table = self.class::TABLE
