@@ -50,26 +50,46 @@ INSERT INTO
 VALUES
   ("Ned","Stark"),
   ("John","Smith"),
-  ("Jane","Doe");
+  ("Jane","Doe"),
+  ("Michael","Scott"),
+  ("Jim","Halpert"),
+  ("Pam","Beasley"),
+  ("Dwight","Schrute"),
+  ("Andrew","Bernard"),
+  ("Sterling", "Archer");
+
 
 INSERT INTO
   questions(title, body, author_id)
 VALUES
-  ("How many toads are in the world?", "How many?", 1);
+  ("How many toads are in the world?", "How many?", 1),
+  ("Which black bear is best?","Bears. Beets. Battlestar Galactica", 5),
+  ("What's a gill?","What is it?", 9),
+  ("Do  you think winter is coming?","Because Winter is Coming", 1);
 
 INSERT INTO
   replies(body, question_id, user_id, parent_id)
 VALUES
-  ("this is an intresting body", 1, 2, null),
-  ("another very well done body", 1, 3, 1);
+  ("Identity theft is not a joke, Jim.", 2, 7, null),
+  ("There are many different kinds of toads", 1, 3, null),
+  ("What are some kinds of toas?",1,2,2);
 
 INSERT INTO
   question_likes(question_id, user_id)
 VALUES
-  (1, 1);
+  (1, 3),
+  (1, 4),
+  (1, 5),
+  (1, 6),
+  (1, 7),
+  (1, 8),
+  (2, 4);
 
 
 INSERT INTO
   question_follows(question_id, user_id)
 VALUES
-  (1, 1);
+  (1, 1),
+  (1, 4),
+  (1, 5),
+  (1, 6);
