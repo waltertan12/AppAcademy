@@ -11,6 +11,4 @@ class Visit < ActiveRecord::Base
     class_name: "ShortenedUrl",
     foreign_key: :short_url_id,
     primary_key: :id
-
-
 end

@@ -15,7 +15,7 @@ require 'securerandom'
 class ShortenedUrl < ActiveRecord::Base
   validates :long_url, presence: true, length: { maximum: 255 }
   validates :short_url, presence: true, uniqueness: true
-  validates :submitter_id, presence: true#, count_in_last_one_min: true
+  validates :submitter_id, presence: true
   validate :count_in_last_one_min, :count_all_for_premium
 
   belongs_to :submitter,
@@ -40,29 +40,39 @@ class ShortenedUrl < ActiveRecord::Base
 
   def self.random_code
     random_code = SecureRandom.urlsafe_base64(16)
+
     while ShortenedUrl.exists?(random_code)
       random_code = SecureRandom.urlsafe_base64(16)
     end
+
     random_code
   end
 
   def self.create_for_user_and_long_url!(user,long_url)
     ShortenedUrl.create!({submitter_id: user.id,
-                          long_url: long_url,
-                          short_url: ShortenedUrl.random_code})
+                          long_url:     long_url,
+                          short_url:    ShortenedUrl.random_code})
   end
 
   def count_in_last_one_min
-    current_count = ShortenedUrl.all.where(submitter_id: submitter_id).where(created_at: 1.minutes.ago..Time.now).count
+    current_count = ShortenedUrl
+                      .all
+                      .where(submitter_id: submitter_id)
+                      .where(created_at: 1.minutes.ago..Time.now)
+                      .count
     if current_count > 5
-      errors.add(:current_count, "oh no you submit to quickly")
+      errors.add(:current_count, "oh no, you submit to quickly")
     end
   end
 
   def count_all_for_premium
-    current_count = ShortenedUrl.all.where(submitter_id: submitter_id).count
+    current_count = ShortenedUrl
+                      .all
+                      .where(submitter_id: submitter_id)
+                      .count
+
     if current_count > 5 && !User.find_by_id(submitter_id).premium
-      errors.add(:current_count, "oh no you should pay us")
+      errors.add(:current_count, "oh no, you should pay us")
     end
   end
 
