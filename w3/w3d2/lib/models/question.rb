@@ -5,20 +5,20 @@ class Question < ModelBase
   attr_accessor :id, :title, :body, :author_id
   TABLE = 'questions'
 
-  def self.find_by_author_id(author_id)
-    question_hashes = QuestionsDatabase.instance.execute(<<-SQL, author_id)
-      SELECT
-        *
-      FROM
-        questions
-      WHERE
-        author_id = ?
-    SQL
+  # def self.find_by_author_id(author_id)
+  #   question_hashes = QuestionsDatabase.instance.execute(<<-SQL, author_id)
+  #     SELECT
+  #       *
+  #     FROM
+  #       questions
+  #     WHERE
+  #       author_id = ?
+  #   SQL
 
-    question_hashes.map do |hash|
-      Question.new(hash)
-    end
-  end
+  #   question_hashes.map do |hash|
+  #     Question.new(hash)
+  #   end
+  # end
 
   def initialize(options = {})
     @id = options['id']
