@@ -15,19 +15,17 @@ def physics_no_chemistry
   # In which years was the Physics prize awarded, but no Chemistry prize?
   execute(<<-SQL)
     SELECT
-      yr
+      DISTINCT nobels.yr
     FROM
       nobels
     WHERE
-      yr IN (
+      subject = 'Physics' AND yr NOT IN (
         SELECT
-          DISTINCT yr
+          DISTINCT nobels.yr
         FROM
           nobels
         WHERE
-          subject = 'Physics'
-      )
-      AND
-      subject <> 'Chemistry'
+          nobels.subject = 'Chemistry'
+    )
   SQL
 end

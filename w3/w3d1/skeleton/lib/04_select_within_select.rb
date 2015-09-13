@@ -136,7 +136,7 @@ def sparse_continents
     WHERE
       continent NOT IN (
         SELECT
-          continent
+          DISTINCT continent
         FROM
           countries
         WHERE

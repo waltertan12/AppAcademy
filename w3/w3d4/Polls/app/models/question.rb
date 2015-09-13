@@ -15,9 +15,9 @@ class Question < ActiveRecord::Base
 
   belongs_to(
     :poll,
-      class_name: "Poll",
-      foreign_key: :poll_id,
-      primary_key: :id
+    class_name: "Poll",
+    foreign_key: :poll_id,
+    primary_key: :id
   )
 
   has_many(
@@ -29,50 +29,19 @@ class Question < ActiveRecord::Base
 
   has_many(
     :responses,
-      through: :answer_choices,
-      source: :responses
+    through: :answer_choices,
+    source: :responses
   )
 
   def results
-    responses = answer_choices.includes(:responses)
-    result = {}
+    result = Hash.new(0)
 
-    sql_command = <<-SQL
-      SELECT
-        answer_choices.*,
-        COUNT(responses.id)
-      FROM
-        answer_choices
-      LEFT OUTER JOIN
-        questions ON answer_choices.question_id = questions.id
-      GROUP BY
-        answer_choices.id
-    SQL
+    choices = answer_choices.select("answer_choices.*, COUNT(answer_choices.id)").joins("LEFT OUTER JOIN responses ON answer_choices.id = responses.answer_choice_id").group("answer_choices.id")
 
-    answer_choices
-      .includes(:responses)
-      .select("answer_choices.*, COUNT(responses.id)")
-      .joins("LEFT OUTER JOIN questions ON questions.id = answer_choices.question_id")
-      .group("answer_choices.id")
-
-
-    Question
-      .select("answer_choices.*, COUNT(answer_choices.id)")
-      .join("LEFT OUTER JOIN responses ON answer_choices.id = responses.answer_choice_id")
-
-    answer_choices.includes(:responses)
-
-    answer_choices
-      .select("answer_choices.body")
-      .joins("LEFT OUTER JOIN responses ON answer_choices.id = responses.answer_choice_id")
-      .where("answer_choices.question_id = #{Question.first.id}")
-      .group("responses.id")
-      .count
-
-
-    responses.each do |response|
-      result[response.body] = response.responses.length
+    choices.each do |choice|
+      result[choice.body] += 1
     end
 
     result
   end
+end
