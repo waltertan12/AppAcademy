@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NinetyNineCatsDay1</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <%#= current_user.user_name %>
+  <% if !current_user.nil? %>
+    Logged in as:
+    <%= current_user.user_name %><%= button_to "Logout", session_url, method: :delete %>
+  <h3>Active Sessions</h3>
+  <%= Geocoder.search(request.remote_ip).first.formatted_address %>
+  <%= button_to "Logout All", destroy_all_session_url, method: :delete %>
+  <ul>
+    <% current_user.user_sessions.each do |session| %>
+  <% browser = session.browser_type %>
+  <li><%= Browser.new(ua: browser).name %></li>
+  <%   %>
+  <% end %>
+  </ul>
+  <% else %>
+    <h1><%= link_to "Please log in", new_session_path %></h1>
+  <% end %>
+
+  <%= yield %>
+
+</body>
+</html>
