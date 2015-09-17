@@ -8,9 +8,15 @@ class SessionsController < ApplicationController
   def create
     @user = User::find_by_credentials(params[:user][:user_name],
                                       params[:user][:password])
-    @user.reset_session_token!
-    login_user!(@user)
-    redirect_to cats_url
+    if @user.nil?
+      flash.now[:danger] = "Cannot find user"
+      render :new
+    else
+      flash[:success] = "Welcome, #{@user.user_name}"
+      @user.reset_session_token!
+      login_user!(@user)
+      redirect_to cats_url
+    end
   end
 
   def destroy

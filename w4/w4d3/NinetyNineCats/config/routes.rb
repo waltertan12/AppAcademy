@@ -1,4 +1,6 @@
 NinetyNineCatsDay1::Application.routes.draw do
+  get 'static_pages/index'
+
   resources :cats, except: :destroy
   resources :cat_rental_requests, only: [:create, :new] do
     post "approve", on: :member
@@ -7,7 +9,7 @@ NinetyNineCatsDay1::Application.routes.draw do
   resource :session, only: [:create, :new, :destroy] do
     delete "destroy_all", on: :member
   end
-  resources :users, only:  [:create, :new, :destroy]
+  resources :users, only:  [:create, :new, :destroy, :show]
 
-  root to: redirect("/cats")
+  root 'static_pages#index'
 end

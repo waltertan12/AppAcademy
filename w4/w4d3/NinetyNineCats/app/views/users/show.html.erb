@@ -1,0 +1,13 @@
+<div class="container">
+  <h1>Active Sessions: </h1><%= button_to "Logout All", destroy_all_session_url, method: :delete %>
+    <ul>
+      <% @user.user_sessions.each do |session| %>
+        <%= Geocoder.search(request.remote_ip).first.city %>
+        <% browser = session.browser_type %>
+        <li>
+          <%= Browser.new(ua: browser).name %>
+          <%= button_to "Log out session", session_url, method: :delete %>
+        </li>
+      <% end %>
+    </ul>
+</div>

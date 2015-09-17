@@ -1,0 +1,25 @@
+<head>
+<style>
+  .center {
+    text-align: center;
+  }
+
+  .jumbotron-cats {
+    color: white;
+    background-image: url("http://i.imgur.com/2xSNYyJ.png");
+    /*background-image: url("http://i.imgur.com/Jibo17S.jpg");*/
+    background-size: cover;
+  }
+
+</style>
+
+</head>
+
+<div class="jumbotron jumbotron-cats center">
+  <h1>OldCatApp</h1>
+  <p>A place to rent old cats</p>
+</div>
+
+<div class="container center">
+  <%= link_to "Login", new_session_path %> | <%= link_to "Sign up", new_user_path %> | <%= link_to "Guest View", cats_path %>
+</div>

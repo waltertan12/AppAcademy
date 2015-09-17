@@ -7,25 +7,47 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <%#= current_user.user_name %>
-  <% if !current_user.nil? %>
-    Logged in as:
-    <%= current_user.user_name %><%= button_to "Logout", session_url, method: :delete %>
-  <h3>Active Sessions</h3>
-  <%= Geocoder.search(request.remote_ip).first.formatted_address %>
-  <%= button_to "Logout All", destroy_all_session_url, method: :delete %>
-  <ul>
-    <% current_user.user_sessions.each do |session| %>
-  <% browser = session.browser_type %>
-  <li><%= Browser.new(ua: browser).name %></li>
-  <%   %>
-  <% end %>
-  </ul>
-  <% else %>
-    <h1><%= link_to "Please log in", new_session_path %></h1>
-  <% end %>
 
-  <%= yield %>
+  <header class="navbar navbar-default" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">OldCatApp</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+    <%= link_to "OldCatApp", root_path, class: "navbar-brand" %>
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav pull-right">
+      <% if current_user %>
+        <li><%= link_to "Sessions", user_url(current_user) %></li>
+        <li><%= link_to "Cats", cats_url %></li>
+        <li><%= link_to "Book a Cat", new_cat_rental_request_url %></li>
+        <li><%= link_to "Sign Out", session_url, method: :delete %></li>
+      <% else %>
+        <li><%= link_to "Login", new_session_path %></li>
+        <li><%= link_to "Sign Up", new_user_path %></li>
+      <% end %>  
+    </ul>
+  </div>
+  </header>
+
+
+    <% flash.each do |type, message| %>
+      <div class="container alert-danger">
+        <%= message %>
+      </div>
+    <% end%>
+
+
+  <div class="container">
+    <%#= if current_user %>
+      <%= yield %>
+    <%# else %>
+      <!-- <img src="http://i.imgur.com/LSa7lU7.jpg" width="150"> -->
+    <%# end %>
+  </div>
 
 </body>
 </html>

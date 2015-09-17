@@ -11,16 +11,23 @@ class UsersController < ApplicationController
     if @user.save
       # render json: @user
       login_user!(@user)
+      flash[:success] = "Welcome, #{@user.user_name}"
       redirect_to root_url
     else
-      flash.now[:errors] = @user.errors.full_messages
+      flash.now[:danger] = @user.errors.full_messages
       render :new
     end
+  end
+
+  def show
+    @user = User.find(params[:id])
+    render :show
   end
 
   def pass_go
     redirect_to root_url if current_user
   end
+
 
   private
   def user_params
