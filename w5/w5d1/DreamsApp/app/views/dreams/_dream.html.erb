@@ -1,0 +1,7 @@
+<li>
+  <% unless dream.spooky?  %>
+    <%= link_to dream.title, dream_url(dream)%>
+  <% else %>
+    👻
+  <% end %>
+</li>

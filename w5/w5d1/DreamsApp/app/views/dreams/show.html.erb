@@ -1,0 +1,43 @@
+<h1>Dreams#show</h1>
+<p>Find me in app/views/dreams/show.html.erb</p>
+
+<%= @dream.title %> |
+<%= @dream.content %> |
+<%= @dream.completeness %> |
+Spooky?: <%= @dream.spooky %>n
+
+<br>
+
+<ul>
+<% @dream.comments.each do |comment| %>
+  <li><% if comment.spooky %>
+      👻
+    <% else %>
+      <%= comment.body %>
+    <% end %></li>
+<% end %>
+</ul>
+
+<h6>Add Dream Comment</h6>
+
+<form class="" action="<%= comments_url %>" method="post">
+  <%= auth_token %>
+  <input type="hidden" name="comment[commentable_type]" value="Dream">
+  <input type="hidden" name="comment[commentable_id]" value="<%= @dream.id %>">
+
+  <br>
+  <label for="">body
+    <input type="password" name="comment[body]">
+  </label>
+  <br>
+  <label for="">spooky
+    <input type="radio" name="comment[spooky]" value="true" >
+  </label>
+  <label for="">non_spooky
+    <input type="radio" name="comment[spooky]" value="false">
+  </label>
+  <br>
+
+<input type="submit" value="Add Dream Comment">
+
+</form>

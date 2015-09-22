@@ -1,0 +1,32 @@
+<% if @dream.persisted? %>
+  <% method = "patch" %>
+  <% attributes = @dream.attributes %>
+  <% action = dream_url(@dream) %>
+<% else %>
+  <% method = "post" %>
+  <% attributes = {} %>
+  <% action = dreams_url %>
+<% end %>
+
+<form action="<%= action %>" method="post">
+  <%= auth_token %>
+  <input type="hidden" name="_method" value="<%= method %>">
+  <label for="">Title
+    <input type="password" name="dream[title]" value="<%= attributes["title"] %>">
+  </label>
+  <label for="">Content
+    <input type="password" name="dream[content]" value="<%= attributes["content"] %>">
+  </label>
+  <label for="">Completeness
+    <input type="password" name="dream[completeness]" value="<%= attributes["completeness"] %>">
+  </label>
+  <label for="">Spooky?
+    <input type="radio" name="dream[spooky]" value="true" <%= "checked" if @dream.persisted? && @dream.spooky? %>>
+  </label>
+  <label for="">non_spooky
+    <input type="radio" name="dream[spooky]" value="false" <%= "checked" if @dream.persisted? && !@dream.spooky? %>>
+  </label>
+  <br>
+
+  <input type="submit" value="Dream Builder">
+</form>
