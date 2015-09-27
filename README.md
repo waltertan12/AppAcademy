@@ -13,3 +13,6 @@ Developed an understanding of Models in the MVC design pattern by first learning
 
 #### [Week 4](w4)
 Developed an understanding of Views and Controllers in the MVC design pattern by building views using ERB and routing actions through controllers. Learned about and implemented user authentication best practices. Explored methods to minimize database queries using ActiveRecord methods like `includes`, `eager_load`, and `inverse_of`.
+
+#### [Week 5](w5)
+Developed a deeper understanding of the MVC design pattern by building a lite version of Ruby on Rails. Explored context, scope, and closures in Javascript by running through week 1 exercises and implementing solutions in JS rather than Ruby.
