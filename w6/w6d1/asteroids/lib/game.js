@@ -17,9 +17,9 @@
     this.image.src = 'space.jpg';
   };
 
-  Game.DIM_X = 800;
-  Game.DIM_Y = 600;
-  Game.NUM_ASTEROIDS = 9;
+  Game.DIM_X = root.innerWidth;
+  Game.DIM_Y = root.innerHeight;
+  Game.NUM_ASTEROIDS = 1;
 
   Game.prototype.randomPosition = function() {
     return { pos:
@@ -37,16 +37,16 @@
 
   Game.prototype.draw = function(ctx) {
     ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
-    ctx.drawImage(this.image, 0, 0);
+    // ctx.drawImage(this.image, 0, 0);
 
-    this.allObjects().forEach(function (asteroid) {
-      asteroid.draw(ctx);
+    this.allObjects().forEach(function (object) {
+      object.draw(ctx);
     });
   };
 
   Game.prototype.moveObjects = function() {
-    this.allObjects().forEach(function (asteroid) {
-      asteroid.move();
+    this.allObjects().forEach(function (object) {
+      object.move();
     });
   };
 

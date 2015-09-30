@@ -38,8 +38,6 @@
 
     if (this.isWrappable) {
       this.pos = this.game.wrap(this.pos);
-    } else {
-
     }
   };
 
@@ -59,5 +57,4 @@
     //   this.game.remove(otherObject);
     // }
   };
-
 }) (this);
