@@ -1,0 +1,35 @@
+.grid-item:hover {
+  background-color: yellow;
+}
+
+body {
+  font-family: Helvetica;
+}
+
+.grid {
+  width: 1155px;
+  list-style-type: none;
+  border: 5px solid black;
+  padding: 0px;
+}
+
+.grid-item {
+  background: grey;
+  float: left;
+  border: 5px solid black;
+  width: 375px;
+  height: 290px;
+  font-size: 300px;
+  text-align: center;
+  padding-bottom: 85px;
+}
+
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.winner {
+  font-size: 325px;
+}

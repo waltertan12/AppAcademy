@@ -17,9 +17,9 @@
     this.image.src = 'space.jpg';
   };
 
-  Game.DIM_X = root.innerWidth;
-  Game.DIM_Y = root.innerHeight;
-  Game.NUM_ASTEROIDS = 1;
+  Game.DIM_X = root.innerHeight;
+  Game.DIM_Y = root.innerWidth;
+  Game.NUM_ASTEROIDS = 10;
 
   Game.prototype.randomPosition = function() {
     return { pos:

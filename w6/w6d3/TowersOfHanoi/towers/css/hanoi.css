@@ -1,0 +1,58 @@
+body {
+  font-family: "Comic Sans MS";
+  color: purple;
+}
+.winner {
+  font-size: 300px;
+}
+
+.tower-container {
+  width: 1200px;
+  height: 900px;
+  position: relative;
+}
+
+.tower {
+  float: left;
+  width: 300px;
+  list-style-type: none;
+  margin: 0 30px;
+  border-bottom: 10px solid pink;
+  bottom: 0;
+  padding-left: 0px;
+}
+
+.tower:hover {
+  border-bottom: 10px solid salmon;
+}
+
+.tower.tower-highlight {
+  border-bottom: 10px solid red;
+}
+
+.disc {
+  width: 300px;
+  height: 250px;
+  margin: 10px 0px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 500px;
+}
+.blank {
+  background-color: none;
+}
+
+.small {
+  background-color: lightblue;
+  width: 100px;
+}
+
+.medium {
+  background-color: lightblue;
+  width: 200px;
+}
+
+.large {
+  background-color: lightblue;
+  width: 300px;
+}
