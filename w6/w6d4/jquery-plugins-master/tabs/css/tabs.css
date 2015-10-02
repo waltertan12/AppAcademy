@@ -1,0 +1,17 @@
+a.active {
+  font-weight: bold;
+}
+
+article.transitioning {
+  display: block;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+article {
+  display: none;
+}
+article.active {
+  display: block;
+  transition: opacity 0.2s;
+}

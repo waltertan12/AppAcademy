@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Coolest BESTEST MOST AWESOMEEST Website</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="../js/tabs.js"></script>
+    <link href="../css/tabs.css" rel="stylesheet" type="text/css" />
+    <script>
+      $(function(){
+        $('.tabs').tabs();
+      })
+    </script>
+  </head>
+  <body>
+    <ul class='tabs' data-content-tabs=".content-tabs">
+      <li>
+        <a class="active" href="#pug">Pug</a>
+      </li>
+      <li>
+        <a href="#boxer">Boxer</a>
+      </li>
+      <li>
+        <a href="#alaskan">Alaskan Eskimo</a>
+      </li>
+    </ul>
+    <section class='content-tabs'>
+      <article class="active" id="pug">
+        <p>
+          Pugs are cool
+        </p>
+      </article>
+      <article id="boxer">
+        <p>
+          Boxers are cool
+        </p>
+      </article>
+      <article id="alaskan">
+        <p>
+          Alaskan eskimos are cool
+        </p>
+      </article>
+
+    </section>
+  </body>
+</html>
