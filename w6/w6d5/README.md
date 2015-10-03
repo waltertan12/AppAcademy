@@ -1,5 +1,2 @@
 # AJAX Twitter
-
-+ [Live Demo][live-demo]
-
-[live-demo]: http://aa-twitter.herokuapp.com/
+A Twitter clone with AJAX for dynamic views.
