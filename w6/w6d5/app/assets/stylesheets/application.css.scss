@@ -26,6 +26,12 @@
   float: left;
 }
 
-button {
-  
+.feed {
+  list-style-type: none;
+}
+
+.feed li {
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
 }

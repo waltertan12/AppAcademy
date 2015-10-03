@@ -82,7 +82,18 @@ $.TweetCompose.prototype.handleSuccess = function(resp) {
   var THIS = this;
   $("input").prop("disabled", false);
   THIS.clearInput();
-  $("#feed").prepend("<li>" + resp.content + "</li>");
+
+  $("#feed").prepend("<li>" + 
+                     resp.content + 
+                     " -- " +
+                     "<a href=\"/users/" + 
+                     resp.user_id +
+                     "\">" +
+                     resp.user.username + 
+                     "</a>" + 
+                     " -- " +
+                     resp.created_at +
+                     "</li>");
 };
 
 $.fn.tweetCompose = function () {

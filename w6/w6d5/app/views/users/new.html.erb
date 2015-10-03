@@ -6,23 +6,27 @@
   <% end %>
 </ul>
 
-<form action="/users" method="POST">
+<form action="/users" method="POST" class="form">
   <input
     type="hidden"
     name="authenticity_token"
-    value="<%= form_authenticity_token %>">
+    value="<%= form_authenticity_token %>"
+    class="form-control">
 
-  <label for="user_username">Username</label>
+  <label class="form-group" for="user_username">Username</label>
   <input
     type="text"
     name="user[username]"
     id="user_username"
-    value="<%= @user.username %>">
+    value="<%= @user.username %>"
+    class="form-control">
   <br>
 
-  <label for="user_password">Password</label>
-  <input type="password" name="user[password]" id="user_password">
+  <label class="form-group" for="user_password">Password</label>
+  <input type="password" name="user[password]" id="user_password"
+  class="form-control">
   <br>
 
   <input class="btn btn-default" type="submit" value="Create User!">
 </form>
+<%= link_to "Already have an account? Log in instead", new_session_path%>
