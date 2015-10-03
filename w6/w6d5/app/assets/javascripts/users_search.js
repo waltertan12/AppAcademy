@@ -25,14 +25,14 @@ $.UsersSearch.prototype.generateButton = function(user) {
     "type='button' " +
     "data-user-id = '" + user.id + "' " +
     "data-initial-follow-state = '" + user.followed + "' " +
-    "class = 'follow-toggle' " +
+    "class = 'follow-toggle btn btn-default' " +
     "name='button'>" +
     "</button>");
 };
 
 $.UsersSearch.prototype.bindEvent = function () {
   var input = this.$input;
-  var that = this;
+  var userSearch = this;
   this.$input.keyup(function() {
     $.ajax({
       url: "/users/search",
@@ -41,7 +41,7 @@ $.UsersSearch.prototype.bindEvent = function () {
       data: "query="  + input.val(),
       success: function(resp) {
         console.log(resp);
-        that.render(resp);
+        userSearch.render(resp);
       }
     });
   });
