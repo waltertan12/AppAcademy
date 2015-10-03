@@ -2,10 +2,31 @@ $.TweetCompose = function (el) {
   this.$el = $(el);
   this.submit();
   this.checkChar();
+  this.addMention();
 };
 
-$.TweetCompose.prototype.render = function () {
+$.TweetCompose.prototype.addMention = function () {
+  var $link = $("a.add-mentioned-user");
+  var $mentioned = $("div.mentioned-users");
+  var $scriptTag = $("script.mention");
+  var html;
+  var mention;
+  $link.on("click", function(event) {
+    event.preventDefault();
+    console.log($scriptTag);
+    html =  "<div>\n" + 
+            $scriptTag.html() +
+            "<a class=\"remove-mention\"" + 
+            "href=\"javascript:void(0)\">Remove Mention</a>\n" +
+            "</div>"
+    console.log(html)
+    $mentioned.append(html);
+  });
 
+  $mentioned.on("click","a.remove-mention", function(event) {
+    event.preventDefault();
+    console.log($(event.currentTarget).parent("div").empty());//.remove();
+  });
 };
 
 $.TweetCompose.prototype.submit = function () {
@@ -54,13 +75,14 @@ $.TweetCompose.prototype.checkChar = function() {
 $.TweetCompose.prototype.clearInput = function(){
   $("form textarea").val("");
   $("form select").val("");
+  $("select.mentioned-users").val("");
 };
 
 $.TweetCompose.prototype.handleSuccess = function(resp) {
   var THIS = this;
-  THIS.$el.filter(":input").prop("disabled", false);
+  $("input").prop("disabled", false);
   THIS.clearInput();
-  $("#feed").prepend("<li>" + JSON.stringify(resp) + "</li>");
+  $("#feed").prepend("<li>" + resp.content + "</li>");
 };
 
 $.fn.tweetCompose = function () {

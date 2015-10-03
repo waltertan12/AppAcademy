@@ -12,16 +12,22 @@
   <strong style="width: 1000px; word-wrap: break-word;" class="charsleft">140</strong>
   <br>
 
-  <label>
-    Mention
-    <select name="tweet[mentioned_user_ids][]">
-      <option></option>
-      <% User.all.each do |user| %>
-        <option value="<%= user.id %>"><%= user.username %></option>
-      <% end %>
-    </select>
-  </label>
+  <a href="javascript:void(0)" class="add-mentioned-user">Add mention</a>
+
+  <div class="mentioned-users"></div>
+
+  <script class="mention" type="text/template">
+    <label>
+      Mention
+      <select name="tweet[mentioned_user_ids][]">
+        <option></option>
+        <% User.all.each do |user| %>
+          <option value="<%= user.id %>"><%= user.username %></option>
+        <% end %>
+      </select>
+    </label>
+  </script>
   <br>
 
-  <input class="submit" type="Submit" value="Post Tweet!">
+  <input class="submit btn btn-default" type="Submit" value="Post Tweet!">
 </form>
