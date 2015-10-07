@@ -22,7 +22,8 @@ var TodoList = React.createClass({
       <div>
         {
           this.state.todos.map(function(todo) {
-            return <TodoListItem key={todo.id} todo={todo} />;
+            return <TodoListItem className="todo-list-item"
+                                 key={todo.id} todo={todo} />;
           })
         }
         <TodoForm />

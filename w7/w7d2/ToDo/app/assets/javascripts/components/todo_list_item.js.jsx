@@ -27,7 +27,8 @@ var TodoListItem = React.createClass({
     }
     return (
       <div>
-        <h2 onClick={this.handleDetail}>{this.props.todo.title}</h2>
+        <h2 className="todo-list-item" 
+            onClick={this.handleDetail}>{this.props.todo.title}</h2>
         <DoneButton todo={this.props.todo}/>
         {detailView}
       </div>
