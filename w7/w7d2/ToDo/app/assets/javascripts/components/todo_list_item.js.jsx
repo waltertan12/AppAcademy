@@ -3,6 +3,10 @@ var TodoListItem = React.createClass({
   getInitialState: function () {
     return { hidden: true };
   },
+
+  componentDidMount: function () {
+
+  },
   
   handleDestroy: function () {
     TodoStore.destroy(this.props.todo.id);
@@ -23,7 +27,7 @@ var TodoListItem = React.createClass({
     }
     return (
       <div>
-        <div onClick={this.handleDetail}>{this.props.todo.title}</div>
+        <h2 onClick={this.handleDetail}>{this.props.todo.title}</h2>
         <DoneButton todo={this.props.todo}/>
         {detailView}
       </div>

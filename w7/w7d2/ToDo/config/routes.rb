@@ -1,24 +1,16 @@
 Rails.application.routes.draw do
   namespace :api do
-  get 'steps/index'
-  end
-
-  namespace :api do
-  get 'steps/create'
-  end
-
-  namespace :api do
-  get 'steps/update'
-  end
-
-  namespace :api do
-  get 'steps/destroy'
+    resources :steps, except: [:index, :create]
   end
 
   root to: 'static_pages#root'
 
   namespace :api do
-    resources :todos, except: [:new, :edit]
+    resources :todos, except: [:new, :edit] do
+      member do
+        resources :steps, only: [:index, :create]
+      end
+    end
   end
 
 
