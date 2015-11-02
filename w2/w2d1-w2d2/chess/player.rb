@@ -1,3 +1,5 @@
+require 'byebug'
+
 class HumanPlayer
   attr_reader :color
 
@@ -31,21 +33,107 @@ class ComputerPlayer
     @level = level
     @piece_to_move = nil
     @next_move = nil
+    @move_from = nil
+    @move_to = nil
   end
+
+  # def get_input(display)
+  #   sleep(0.025)
+  #   if @move_from.nil?
+  #     piece_and_move = select_smarter
+  #     p piece_and_move
+  #     @piece_to_move = piece_and_move.first
+  #     @next_move     = piece_and_move.last
+  #     coords         = @piece_to_move.position
+  #   else
+  #     coords = @next_move
+  #     @next_move, @piece_to_move = nil, nil
+  #   end
+  #   coords
+  # end
 
   def get_input(display)
     sleep(0.025)
-    if @piece_to_move.nil?
-      piece_and_move = select_smarter
-      p piece_and_move
-      @piece_to_move = piece_and_move.first
-      @next_move     = piece_and_move.last
-      coords         = @piece_to_move.position
+    
+    if @move_from.nil?
+      moves = minimax(board, true, 3, 9999999, -9999999)
+      @move_from = moves[:move_from]
+      @move_to   = moves[:move_to]
+      coords     = @move_from
     else
-      coords = @next_move
-      @next_move, @piece_to_move = nil, nil
+      coords = @move_to
+      @move_from, @move_to = nil, nil
     end
+
     coords
+  end
+
+  def minimax(board, player, depth, min, max)
+    return utility(board) if depth == 0
+
+    
+    
+    # gotta DRY this out soon
+    if player
+      best_move = {score: max, move_from: nil, move_to: nil}
+
+      my_pieces(board).each do |piece|
+        piece.legal_moves.each do |move|
+          duped_board = board.dup
+          current_piece = duped_board[*piece.position]
+
+          duped_board.move(current_piece, move)
+          score = minimax(duped_board, false, depth - 1, min, max)
+          break if score[:score] >= min
+
+          if score[:score] > max
+            max = score[:score]
+            best_move = {score: score[:score], move_from: piece.position, move_to: move}
+          end
+        end
+      end
+
+      return best_move
+    else
+      best_move = {score: min, move_from: nil, move_to: nil}
+
+      my_pieces(board).each do |piece|
+        piece.legal_moves.each do |move|
+          duped_board = board.dup
+          current_piece = duped_board[*piece.position]
+
+          duped_board.move(current_piece, move)
+          score = minimax(duped_board, true, depth - 1, min, max)
+
+          break if score[:score] <= max
+
+          if score[:score] < min
+            min = score[:score]
+            best_move = {score: score[:score], move_from: piece.position, move_to: move}
+          end
+        end
+      end
+      
+      return best_move
+    end
+  end
+
+  def utility(board)
+    my_pieces = my_pieces(board)
+    opponent_pieces = opponent_pieces(board)
+
+    my_score = 0
+    opponent_score = 0
+
+    my_pieces.each do |piece|
+      my_score += Points[piece.class]
+    end
+
+    opponent_pieces.each do |piece|
+      opponent_score += Points[piece.class]
+    end
+
+    {score: my_score - opponent_score}
   end
 
   def select_smarter
@@ -86,6 +174,28 @@ class ComputerPlayer
   def lose_piece?(tile)
     tile.occupied? && tile.color == @color
   end
+
+  # def children_two(parent_board, pieces)
+  #   children_arr = []
+
+  #   pieces.each do |piece|
+  #     piece.legal_moves.each do |move|
+  #       duped_board = parent_board.dup
+  #       current_piece = duped_board[*piece.position]
+  #       tile = duped_board[*move]
+
+  #       duped_board.move(current_piece, move)
+  #       children_arr << {
+  #         board: duped_board, 
+  #         piece: piece, 
+  #         move_from: piece.position, 
+  #         move_to: move
+  #       }
+  #     end
+  #   end
+
+  #   children_arr
+  # end
 
   def children(parent_board, pieces)
     children_arr = []
