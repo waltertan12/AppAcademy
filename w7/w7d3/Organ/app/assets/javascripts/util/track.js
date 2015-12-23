@@ -8,8 +8,8 @@
   }
 
   var Track = root.Track = function (attributes) {
-    this.name = attributes.name;
-    this.roll = attributes.roll;
+    this.name = attributes.name || "";
+    this.roll = attributes.roll || [];
   };
 
   Track.prototype.startRecording = function () {
@@ -18,31 +18,29 @@
   };
 
   Track.prototype.stopRecording = function () {
-    this.addNotes({notes: ["STOP"], time: Date.now()});
+    this.roll.push({timeSlice: 0, notes: []});
   };
 
   Track.prototype.addNotes = function (notes) {
-    this.roll.push(notes);
+    this.roll.push({timeSlice: Date.now() - this.time, notes: notes});
   };
 
   Track.prototype.play = function () {
-    var playBackStartTime = Date.now();
+    var playBackStartTime = Date.now(),
+        currentNote = 0;
 
-    var i = 0;
-    var playBack = setInterval(function() {
-      var timeSlice = this.roll[i].time - this.time;
-      var elapsedTime = Date.now() - playBackStartTime;
-
-      if (this.roll[i].notes[0] === "STOP") {
-        KeyStore.replace([]);
-        clearInterval(playBack);
-      } else if (elapsedTime > timeSlice) {
-        i++;
+    var playBack = setInterval(() => {
+      console.log("currentNote: " + currentNote);
+      console.log("length: " + this.roll.length);
+      if (currentNote < this.roll.length) {
+        if (Date.now() - playBackStartTime >= this.roll[currentNote].timeSlice) {
+          KeyActions.playbackUpdate(this.roll[currentNote].notes.slice());
+          currentNote++;
+        }
       } else {
-        KeyStore.replace(this.roll[i].notes);
-        // console.log(KeyStore.all());
+        clearInterval(playBack);
       }
-    }.bind(this), 60);
+    }, 10);
 
   };
 }(this));

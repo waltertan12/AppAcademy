@@ -11,7 +11,7 @@
     getInitialState: function() {
       return {
         isRecording: false,
-        track: new Track({})
+        track: new Track({name: "", roll: []})
       };
     },
 
@@ -21,13 +21,10 @@
 
     recordNote: function () {
       var currentTrack = this.state.track;
-      var keyStore = KeyStore.all();
-      currentTrack.addNotes({notes: KeyStore.all(), time: Date.now()});
+      currentTrack.addNotes( KeyStore.all().slice() );
     },
 
     invokeAction: function () {
-      var action = null;
-
       if (this.state.isRecording) {
         this.setState({isRecording: false});
         this.state.track.stopRecording();
@@ -38,13 +35,12 @@
     },
 
     status: function () {
-      var state = "";
+      var state;
 
-      if (this.state.isRecording) {
+      if (this.state.isRecording)
         state = "Stop";
-      } else {
+      else
         state = "Start";
-      }
 
       return state;
     },

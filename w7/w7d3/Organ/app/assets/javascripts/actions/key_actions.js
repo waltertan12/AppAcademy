@@ -21,5 +21,12 @@ var KeyActions = {
       actionType: "KEY_RELEASE",
       noteName: noteName
     });
+  },
+
+  playbackUpdate: function (notes) {
+    AppDispatcher.dispatch({
+      actionType: "KEY_PRESSES",
+      notes: notes
+    })
   }
 };

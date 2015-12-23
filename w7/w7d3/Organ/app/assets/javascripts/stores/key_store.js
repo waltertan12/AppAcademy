@@ -31,8 +31,6 @@
 
     replace: function (newNotes) {
       _keys = newNotes;
-      console.log(newNotes);
-      console.log(_keys);
       this.changed();
     },
 
@@ -41,7 +39,9 @@
     },
 
     noteInStore: function (noteName) {
+      console.log(_keys);
       var idx = _keys.indexOf(noteName);
+
       return idx !== -1;
     }
   });
@@ -49,12 +49,13 @@
   AppDispatcher.register(function(action) {
     switch(action.actionType) {
       case "KEY_PRESS":
-        console.log("KEY_PRESS " + action.noteName);
         root.KeyStore.addKey(action.noteName);
         break;
       case "KEY_RELEASE":
-        console.log("KEY_RELEASE " + action.noteName);
         root.KeyStore.removeKey(action.noteName);
+        break;
+      case "KEY_PRESSES":
+        root.KeyStore.replace(action.notes);
         break;
     }
   });

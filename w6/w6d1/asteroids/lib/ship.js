@@ -37,11 +37,15 @@
   };
 
   Ship.prototype.rotate = function(direction) {
-    if (direction === "left") {
-      this.angle = this.angle + (Math.PI / 16);
-    } else if (direction === "right") {
-      this.angle = this.angle - (Math.PI / 16);
+    switch (direction) {
+      case "left":
+        this.angle = this.angle + (Math.PI / 16);
+        break;
+      case "right":
+        this.angle = this.angle - (Math.PI / 16);
+        break;
     }
+
     this.setPoint(this.angle);
   };
 
@@ -77,7 +81,7 @@
     ctx.fillStyle = "lightpink";
     ctx.beginPath();
 
-    //void ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+    // void ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
     ctx.arc(
       this.point[0],
       this.point[1],
@@ -91,16 +95,22 @@
   }
 
   Ship.prototype.power = function(impulse) {
-    var direction = [(this.point[0] - this.pos[0]) / this.radius, 
-                     (this.point[1] - this.pos[1]) / this.radius];
+    var direction = [
+      (this.point[0] - this.pos[0]) / this.radius, 
+      (this.point[1] - this.pos[1]) / this.radius
+    ];
 
-    this.vel = [this.vel[0] + direction[0], 
-                this.vel[1] + direction[1]] ;
+    this.vel = [
+      this.vel[0] + direction[0], 
+      this.vel[1] + direction[1]
+    ];
   };
 
   Ship.prototype.fireBullet = function () {
-    var direction = [(this.point[0] - this.pos[0]) / this.radius * 8, 
-                     (this.point[1] - this.pos[1]) / this.radius * 8]
+    var direction = [
+      (this.point[0] - this.pos[0]) / this.radius * 8, 
+      (this.point[1] - this.pos[1]) / this.radius * 8
+    ];
 
     var bullet = new Bullet(this.pos, direction, this.game);
     this.game.bullets.push(bullet);
