@@ -39,7 +39,6 @@
     },
 
     noteInStore: function (noteName) {
-      console.log(_keys);
       var idx = _keys.indexOf(noteName);
 
       return idx !== -1;
