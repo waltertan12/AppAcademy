@@ -19,8 +19,9 @@
           }
           </div>
           <div className="clearfix">
-            <Recorder className="Recorder" />
           </div>
+          <br/><br/>
+          <Recorder className="Recorder" />
         </div>
       );
     }

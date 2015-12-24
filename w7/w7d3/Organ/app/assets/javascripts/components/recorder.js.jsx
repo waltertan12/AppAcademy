@@ -48,11 +48,16 @@
     },
 
     render: function() {
+      var buttonClass;
+      if (this.state.isRecording)
+        buttonClass = "btn btn-danger";
+      else
+        buttonClass = "btn btn-success";
       return (
         <div>
-          <button className="btn btn-default" 
+          <button className={buttonClass} 
                   onClick={this.invokeAction}>{this.status()}</button>
-          <button className="btn btn-default" 
+          <button className="btn btn-primary" 
                   onClick={this.state.track.play.bind(this.state.track)}>Play</button>
         </div>
       );
