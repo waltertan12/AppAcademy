@@ -20,8 +20,10 @@
     },
 
     recordNote: function () {
-      var currentTrack = this.state.track;
-      currentTrack.addNotes( KeyStore.all().slice() );
+      if (this.state.isRecording) {
+        var currentTrack = this.state.track;
+        currentTrack.addNotes( KeyStore.all().slice() );
+      }
     },
 
     invokeAction: function () {
