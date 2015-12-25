@@ -1,4 +1,4 @@
-window.TONES = {
+window.UPPER_TONES = {
   "A4":  440.00,
   "A#4": 466.16,
   "B4":  493.88,
@@ -23,6 +23,12 @@ window.TONES = {
   // "F#6":  1479.98,
   // "G6":   1567.98,
   // "G#6":  1661.22
+};
+
+window.LOWER_TONES = {
+  "G#4": 415.305,
+  "G4": 391.995,
+  "F#4": 369.994
 };
 
 window.KEYMAP = {

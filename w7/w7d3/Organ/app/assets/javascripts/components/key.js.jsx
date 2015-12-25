@@ -14,7 +14,8 @@
       };
     },
     componentDidMount: function() {
-      var freq = window.TONES[this.props.noteName];
+      var freq = window.UPPER_TONES[this.props.noteName];
+      if(!freq) freq = window.LOWER_TONES[this.props.noteName];
       this.note = new Note(freq);
       KeyStore.addChangeHandler("CHANGE", this.handleKeyPress);
     },

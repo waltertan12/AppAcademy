@@ -11,15 +11,23 @@
     render: function () {
       return (
         <div>
-          <div className="keyboard">
+          <div className="keyboard keyboard-upper">
           {
-            Object.keys(window.TONES).map(function (tone, idx) {
+            Object.keys(window.UPPER_TONES).map(function (tone, idx) {
               return <Key noteName={tone} key={idx}/>;
             })
           }
           </div>
-          <div className="clearfix">
+          <br className="clearfix"/>
+          <br/><br/><br/><br/><br/><br/>
+          <div className="keyboard keyboard-lower">
+          {
+            Object.keys(window.LOWER_TONES).map(function (tone, idx) {
+              return <Key noteName={tone} key={idx}/>;
+            })
+          }
           </div>
+          <div className="clearfix"/>
           <br/><br/>
           <Recorder className="Recorder" />
         </div>
