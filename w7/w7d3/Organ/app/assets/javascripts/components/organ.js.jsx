@@ -11,7 +11,7 @@
     render: function () {
       return (
         <div>
-          <div className="keyboard keyboard-upper">
+          <div className="keyboard container keyboard-upper">
           {
             Object.keys(window.UPPER_TONES).map(function (tone, idx) {
               return <Key noteName={tone} key={idx}/>;
@@ -19,8 +19,8 @@
           }
           </div>
           <br className="clearfix"/>
-          <br/><br/><br/><br/><br/><br/>
-          <div className="keyboard keyboard-lower">
+
+          <div className="keyboard container keyboard-lower">
           {
             Object.keys(window.LOWER_TONES).map(function (tone, idx) {
               return <Key noteName={tone} key={idx}/>;
