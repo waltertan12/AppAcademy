@@ -10,7 +10,11 @@
   var Organ = root.Organ = React.createClass({
     render: function () {
       return (
-        <div>
+        <div className="container">
+          <h1>synthakeyorganApp</h1>
+          <h5><em>
+            you are literally Beethoven
+          </em></h5>
           <div className="keyboard container keyboard-upper">
           {
             Object.keys(window.UPPER_TONES).map(function (tone, idx) {

@@ -38,7 +38,8 @@
       }
 
       return (
-        <div className={"key " + black + this.state.pressed.toString()}>{this.props.noteName}</div>
+        <div className={"key " + black + this.state.pressed.toString()}>
+          <p>{this.props.noteName}</p></div>
       );
     }
   });

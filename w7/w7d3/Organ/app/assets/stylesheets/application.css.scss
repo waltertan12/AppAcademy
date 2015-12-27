@@ -17,6 +17,10 @@
  @import "bootstrap-sprockets";
  @import "bootstrap";
 
+ #content {
+  text-align: center;
+ }
+
 div.key.true {
   background-color: tomato;
 }
@@ -26,14 +30,17 @@ div.key.true {
 }
 
 .key {
+  display: inline-block;
   position: relative;
-  float: left;
   height: 150px;
   width: 30px;
   border: 1px solid lightgray;
   border-radius: 3px;
   text-align: center;
   z-index: -1;
+  p {
+    transform: translateY(100px);
+  }
 }
 
 .black {
@@ -43,6 +50,9 @@ div.key.true {
   margin-left: -15px;
   margin-right: -15px;
   z-index: 1;
+  p {
+    transform: translateY(60px);
+  }
 }
 
 .clearfix:after {
@@ -56,5 +66,5 @@ div.key.true {
 }
 
 body {
-  font-family: Ubuntu, Consolas, Helvetica;
+  font-family: "Varela Round", Ubuntu, Helvetica;
 }

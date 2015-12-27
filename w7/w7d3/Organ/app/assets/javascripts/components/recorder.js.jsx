@@ -42,7 +42,7 @@
       if (this.state.isRecording)
         state = "Stop";
       else
-        state = "Start";
+        state = "Record";
 
       return state;
     },
@@ -59,6 +59,7 @@
                   onClick={this.invokeAction}>{this.status()}</button>
           <button className="btn btn-primary" 
                   onClick={this.state.track.play.bind(this.state.track)}>Play</button>
+          <button className="btn btn-warning">Save</button>
         </div>
       );
     }
