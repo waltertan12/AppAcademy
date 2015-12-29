@@ -20,7 +20,7 @@
         method: "POST",
         data: {track: track},
         success: function (track) {
-          console.log(track);
+          callback(track);
         },
         error: function (e) {
           console.log(e);

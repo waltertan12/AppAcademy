@@ -1,16 +1,15 @@
 class Api::TracksController < ApplicationController
   def index
     @tracks = Track.all
-    render json: @tracks
+    render :index
   end
 
   def show
     @track = Track.find(params[:id])
-    render json: @track
+    render :show
   end
 
   def create
-    p params[:roll]
     @track = Track.new(track_params)
 
     if @track.save

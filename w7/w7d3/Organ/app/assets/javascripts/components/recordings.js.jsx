@@ -17,7 +17,7 @@
     },
 
     updateTracks: function () {
-      this.setState({tracks: TrackStore.all()});
+      this.setState({tracks: TrackStore.all().slice()});
     },
 
     render: function () {
