@@ -19,7 +19,7 @@
         "Debussy",
         "Ravel",
         "Bach",
-        "Rick Astley"
+        "RickAstley"
       ],
       len = composers.length;
 
@@ -28,8 +28,9 @@
 
     render: function () {
       var composer = this.composerGenerator();
+      document.title = composer + "App";
       return (
-        <div className="container">
+        <div>
           <h1>{composer}App</h1>
           <h5><em>
             you are literally {composer}
@@ -52,6 +53,8 @@
           </div>
           <br/><br/>
           <Recorder className="Recorder" />
+          <Recordings />
+          <SaveModal />
         </div>
       );
     }

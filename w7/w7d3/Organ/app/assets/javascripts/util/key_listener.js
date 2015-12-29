@@ -1,5 +1,4 @@
 window.addEventListener('keydown', function (e) {
-  console.log(e.keyCode);
   if (!e.repeat) {
     KeyActions.keyPressed(e.keyCode);
   }

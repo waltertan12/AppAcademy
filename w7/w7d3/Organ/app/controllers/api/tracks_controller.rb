@@ -10,6 +10,7 @@ class Api::TracksController < ApplicationController
   end
 
   def create
+    p params[:roll]
     @track = Track.new(track_params)
 
     if @track.save

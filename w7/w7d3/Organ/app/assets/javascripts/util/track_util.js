@@ -1,24 +1,24 @@
 (function (root) {
-  if (typeof root.TrackUtil === "undefined") root.TrackUtil = {};
+  if (typeof root.TrackUtils === "undefined") root.TrackUtils = {};
 
-  root.TrackUtil = {
-    fetchAllTracks: function() {
+  root.TrackUtils = {
+    fetchAllTracks: function(callback) {
       $.ajax({
         url: "/api/tracks",
         method: "GET",
         success: function (tracks) {
-          console.log(tracks);
+          callback(tracks);
         },
         error: function (e) {
           console.log(e);
         }
       })
     },
-    saveTrack: function (track) {
+    saveTrack: function (track, callback) {
       $.ajax({
         url: "/api/tracks",
         method: "POST",
-        data: track,
+        data: {track: track},
         success: function (track) {
           console.log(track);
         },

@@ -30,36 +30,40 @@
       if (this.state.isRecording) {
         this.setState({isRecording: false});
         this.state.track.stopRecording();
+        TrackActions.storeCurrentTrack(this.state.track);
       } else {
         this.setState({isRecording: true});
         this.state.track.startRecording();
       }
     },
 
-    status: function () {
-      var state;
-
-      if (this.state.isRecording)
-        state = "Stop";
-      else
-        state = "Record";
-
-      return state;
+    saveTrack: function (e) {
+      console.log(this.state.track);
+      e.preventDefault();
+      var modal = document.getElementById("modal");
+      modal.classList.add("active");
     },
 
     render: function() {
-      var buttonClass;
-      if (this.state.isRecording)
+      var buttonClass, status;
+      if (this.state.isRecording){
         buttonClass = "btn btn-danger";
-      else
+        status = "Stop";
+      }
+      else{
         buttonClass = "btn btn-success";
+        status = "Record";
+      }
+
       return (
         <div>
           <button className={buttonClass} 
-                  onClick={this.invokeAction}>{this.status()}</button>
+                  onClick={this.invokeAction}>{status}</button>
           <button className="btn btn-primary" 
                   onClick={this.state.track.play.bind(this.state.track)}>Play</button>
-          <button className="btn btn-warning">Save</button>
+          <button className="btn btn-warning" onClick={this.saveTrack}>
+            Save
+          </button>
         </div>
       );
     }
