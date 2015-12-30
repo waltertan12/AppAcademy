@@ -5,7 +5,7 @@
   'use strict';
 
   var _tracks = [];
-  var _currentTrack = null;
+  var _currentTrack = new Track({});
 
   const CHANGE_EVENT = "CHANGE_EVENT";
 
@@ -40,6 +40,10 @@
 
     dispatcherID: AppDispatcher.register(function(payload) {
       switch(payload.actionType) {
+        case "SET_TRACK":
+          TrackStore.storeCurrentTrack(payload.track);
+          TrackStore.emit(CHANGE_EVENT);
+          break;
         case "FETCH_TRACKS":
           TrackStore.fetchAllTracks(payload.tracks);
           TrackStore.emit(CHANGE_EVENT);
@@ -50,6 +54,7 @@
           break;
         case "STORE_TRACK":
           TrackStore.storeCurrentTrack(payload.track);
+          TrackStore.emit(CHANGE_EVENT);
           break;
       }
     })

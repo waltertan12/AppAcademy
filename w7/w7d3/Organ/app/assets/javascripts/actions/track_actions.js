@@ -2,6 +2,12 @@
   'use strict';
 
   root.TrackActions = {
+    setCurrentTrack: function (track) {
+      AppDispatcher.dispatch({
+        actionType: "SET_TRACK",
+        track: track
+      });
+    },
     getTracks: function (tracks) {
       var dispatchCallback = (tracks) => { 
         AppDispatcher.dispatch({

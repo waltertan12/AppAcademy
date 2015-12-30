@@ -17,11 +17,13 @@
 
     componentDidMount: function() {
       KeyStore.addChangeHandler("CHANGE", this.recordNote);
+      TrackStore.addChangeListener(this.setTrack);
     },
 
     recordNote: function () {
       if (this.state.isRecording) {
         var currentTrack = this.state.track;
+        console.log(currentTrack);
         currentTrack.addNotes( KeyStore.all().slice() );
       }
     },
@@ -32,13 +34,23 @@
         this.state.track.stopRecording();
         TrackActions.storeCurrentTrack(this.state.track);
       } else {
-        this.setState({isRecording: true});
-        this.state.track.startRecording();
+        console.log("invoked");
+        if (this.state.track.roll.length > 1) {
+          console.log("if statement true")
+          this.setState({track: new Track({name: "", roll: []})});
+          this.state.track.startRecording();
+          this.setState({ isRecording: true });
+        }
+        // this.state.setState({ time: Date.now() });
       }
     },
 
+    setTrack: function (e) {
+      console.log("Setting track");
+      this.setState({track: TrackStore.currentTrack()});
+    },
+
     saveTrack: function (e) {
-      console.log(this.state.track);
       e.preventDefault();
       var modal = document.getElementById("modal");
       modal.classList.add("active");
@@ -46,11 +58,11 @@
 
     render: function() {
       var buttonClass, status;
-      if (this.state.isRecording){
+      if (this.state.isRecording) {
         buttonClass = "btn btn-danger";
         status = "Stop";
       }
-      else{
+      else {
         buttonClass = "btn btn-success";
         status = "Record";
       }
@@ -60,7 +72,9 @@
           <button className={buttonClass} 
                   onClick={this.invokeAction}>{status}</button>
           <button className="btn btn-primary" 
-                  onClick={this.state.track.play.bind(this.state.track)}>Play</button>
+                  onClick={this.state.track.play.bind(this.state.track)}>
+                  Play
+          </button>
           <button className="btn btn-warning" onClick={this.saveTrack}>
             Save
           </button>

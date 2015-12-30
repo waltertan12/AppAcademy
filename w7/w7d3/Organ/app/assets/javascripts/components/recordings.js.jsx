@@ -30,7 +30,9 @@
           <ul>
             {
               tracks.map(function (track) {
-                return <li key={track.id}>{track.name}</li>;
+                return (
+                  <RecordingIndexItem track={track} key={track.id} />
+                );
               })
             }
           </ul>

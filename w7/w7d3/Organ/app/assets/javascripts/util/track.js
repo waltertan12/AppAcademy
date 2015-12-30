@@ -8,8 +8,10 @@
   }
 
   var Track = root.Track = function (attributes) {
-    this.name = attributes.name || "";
-    this.roll = attributes.roll || [];
+    this.id      = attributes.id       || -1;
+    this.created = attributes.created  || "undefined";
+    this.name    = attributes.name     || "";
+    this.roll    = attributes.roll     || [];
   };
 
   Track.prototype.startRecording = function () {
@@ -30,8 +32,6 @@
         currentNote = 0;
 
     var playBack = setInterval(() => {
-      // console.log("currentNote: " + currentNote);
-      // console.log("length: " + this.roll.length);
       if (currentNote < this.roll.length) {
         if (Date.now() - playBackStartTime >= this.roll[currentNote].timeSlice) {
           KeyActions.playbackUpdate(this.roll[currentNote].notes.slice());

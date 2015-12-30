@@ -105,6 +105,14 @@ div.save-modal.active {
   transition-duration: 300ms;
 }
 
+.recording-index-item {
+  font-weight: bold;
+  em {
+    font-weight: normal;
+    color: gray;
+  }
+}
+
 body {
   font-family: "Varela Round", Ubuntu, Helvetica;
 }
