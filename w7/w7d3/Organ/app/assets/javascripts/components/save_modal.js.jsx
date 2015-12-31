@@ -43,7 +43,7 @@
     render: function () {
       return (
         <div id="modal" className="save-modal ">
-          <h3>Save Track!</h3>
+          <h3>Save Your Masterpiece</h3>
           <form>
             <label>Track Name</label><br/>
             <input className="form-control" 

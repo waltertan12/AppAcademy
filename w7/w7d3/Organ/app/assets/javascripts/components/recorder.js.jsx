@@ -23,7 +23,6 @@
     recordNote: function () {
       if (this.state.isRecording) {
         var currentTrack = this.state.track;
-        console.log(currentTrack);
         currentTrack.addNotes( KeyStore.all().slice() );
       }
     },
@@ -34,19 +33,14 @@
         this.state.track.stopRecording();
         TrackActions.storeCurrentTrack(this.state.track);
       } else {
-        console.log("invoked");
-        if (this.state.track.roll.length > 1) {
-          console.log("if statement true")
-          this.setState({track: new Track({name: "", roll: []})});
-          this.state.track.startRecording();
-          this.setState({ isRecording: true });
-        }
-        // this.state.setState({ time: Date.now() });
+        var newTrack = new Track({name: "", roll: []});
+        this.setState({track: newTrack});
+        newTrack.startRecording();
+        this.setState({ isRecording: true });
       }
     },
 
     setTrack: function (e) {
-      console.log("Setting track");
       this.setState({track: TrackStore.currentTrack()});
     },
 
@@ -75,7 +69,8 @@
                   onClick={this.state.track.play.bind(this.state.track)}>
                   Play
           </button>
-          <button className="btn btn-warning" onClick={this.saveTrack}>
+          <button className="btn btn-warning" 
+                  onClick={this.saveTrack}>
             Save
           </button>
         </div>
@@ -83,4 +78,4 @@
     }
   });
 
-}(this));
+})(this);

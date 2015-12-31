@@ -2,12 +2,14 @@
   if (typeof root.TrackUtils === "undefined") root.TrackUtils = {};
 
   var _initTrack = function (track) {
-    return new Track({
+    var newTrack = new Track({
       name: track.name,
       created: track.created,
       roll: track.roll,
       id: track.id
-    })
+    });
+
+    return newTrack;
   };
 
   root.TrackUtils = {
@@ -32,7 +34,8 @@
         method: "POST",
         data: {track: track},
         success: function (track) {
-          callback(_initTrack(track));
+          var trackObject = _initTrack(track);
+          callback(trackObject);
         },
         error: function (e) {
           console.log(e);
