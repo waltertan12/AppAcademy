@@ -20,5 +20,8 @@ Developed a deeper understanding of the MVC design pattern by building a lite ve
 #### [Week 6](w6)
 Focused on front end development (CSS, HTML Canvas, DOM Manipulation, jQuery). Began integrating JavaScript with Rails backend to create dynamic web pages. 
 
-#### [Week7](w7)
+#### [Week 7](w7)
 Develop single page web applications using AJAX requests and the front-end framework React. Gained understanding of the Flux architecture and unidirectional data flow.
+
+#### [Week 8 - 9](http://github.com/waltertan12/FinalProject)
+Create single page web application using a Rails JSON API and a React/Flux front-end.
